@@ -1,0 +1,59 @@
+.zlecenie-detale {
+    h1 {
+        text-align: center;
+        margin: 30px;
+    }
+    .pom-title {
+        text-align: left;
+        margin: 30px 40px;
+    }
+    .zl-info {
+        padding: 20px 30px;
+        margin: 10px auto;
+        border: 1px solid black;
+        border-radius: 10px;
+        width: 90%;
+        height: auto;
+        p {
+            margin: 5px;
+        }
+    }
+    .pom-info {
+        margin: 10px auto;
+        border: 1px solid black;
+        border-radius: 10px;
+        width: 90%;
+        height: 300px;
+        overflow: auto;
+        .pomiary-tab {
+            margin: 20px auto;
+        }
+        
+    }
+    .img-info-container {
+        display: flex;
+        flex-direction: row;
+        img {
+            margin: 0px 40px;
+        }
+    }
+    .img-info {
+        margin: 10px auto;
+        border: 1px solid black;
+        border-radius: 10px;
+        width: 90%;
+        height: 300px;
+        overflow: auto;
+    }
+    .vid-info {
+        margin: 10px auto;
+        width: 90%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        iframe, h2 {
+            margin: 10px auto;
+        }
+    }
+}

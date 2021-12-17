@@ -1,0 +1,55 @@
+$base-color1: #2B2E4A;
+$base-color1: #E84545;
+$base-color1: #903749;
+
+table {
+    margin: 0 auto;
+    border: 1px solid black;
+    text-align: center;
+    width: 90%;
+    border-collapse: collapse; border-spacing: 0; /* cellspacing */
+}
+
+thead {
+    // background-color: brown;
+    th {
+        padding: 5px 10px;
+        border: 1px solid black;
+        background-color: $base-color1;
+        color: rgb(228, 228, 228);
+    }
+
+}
+tbody {
+    tr {
+        margin: 10px;
+
+        &:hover {
+            background-color: rgb(226, 226, 226);
+        }
+        td {
+            padding: 5px 0;
+            border: 1px solid black;
+            
+        }
+    }
+}
+#exports {
+    margin: 0 auto;
+    width: 90%;
+    display: flex;
+    justify-content: right;
+    button {
+        margin: 20px 10px 10px 10px;
+        padding: 10px 20px;
+        background-color: #2B2E4A;
+        color: rgb(228, 228, 228);
+        border-radius: 4px;
+        border: none;
+        transition: 0.2s;
+        &:hover {
+            cursor: pointer;
+            background-color: #505588;
+        }
+    }
+}

@@ -21,8 +21,9 @@ $base-color1: #903749;
   .nav-logo {
     margin-right: auto;
   }
-  div:hover {
+  div:hover, a:hover {
     color: #E84545;
     cursor: pointer;
   }
+  
 }

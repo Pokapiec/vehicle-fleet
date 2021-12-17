@@ -1,0 +1,28 @@
+li {
+    width: 90%;
+    height: 50px;
+    background-color: #903749;
+    color: rgb(228, 228, 228);
+    border-radius: 5px;
+    margin: 5px auto;
+    padding: 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    transition: 0.1s;
+    &:hover {
+        background-color: #722b39;
+        cursor: pointer;
+    }
+}
+
+ul {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(228, 228, 228);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }

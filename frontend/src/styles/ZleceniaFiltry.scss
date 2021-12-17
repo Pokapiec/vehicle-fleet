@@ -1,4 +1,4 @@
-section {
+.filter-zl {
     margin: 40px auto;
     width: 90%;
     height: auto;
@@ -8,6 +8,7 @@ section {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    color: rgb(53, 53, 53);
     .filter-section {
         padding: 10px;
         width: auto;
@@ -23,17 +24,25 @@ section {
         margin: 0 10px;
     }
     .labels {
-        margin: 20px 10px;
+        margin: 20px 5px;
     }
     .dates {
         max-width: 180px;
     }
+    .trasa {
+        font-size: 30px;
+    }
+    
+    input, label {
+        display: inline-block;
+        margin: 3px;
+    }
+
 }
 
-.trasa {
-    font-size: 30px;
+input:hover {
+    cursor: pointer;
 }
-
-input, label {
-    display: inline-block;
+.dates-section {
+    display: flex;
 }
