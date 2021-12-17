@@ -1,0 +1,28 @@
+$base-color1: #2B2E4A;
+$base-color1: #E84545;
+$base-color1: #903749;
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  background-color: #2B2E4A;
+  color: rgb(228, 228, 228);
+  height: 60px;
+  div {
+    margin: auto 10px;
+    transition: 0.3s;
+  }
+  .nav-logo {
+    margin-right: auto;
+  }
+  div:hover {
+    color: #E84545;
+    cursor: pointer;
+  }
+}

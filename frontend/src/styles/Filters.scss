@@ -1,0 +1,39 @@
+section {
+    margin: 40px auto;
+    width: 90%;
+    height: auto;
+    border: 1px solid rgb(202, 202, 202);
+    border-radius: 10px;
+    box-shadow: 0 0 5px gray;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .filter-section {
+        padding: 10px;
+        width: auto;
+    }
+    .checkboxes {
+        display: flex;
+        flex-direction: row;
+        span {
+            margin: 10px;
+        }
+    }
+    #trasa {
+        margin: 0 10px;
+    }
+    .labels {
+        margin: 20px 10px;
+    }
+    .dates {
+        max-width: 180px;
+    }
+}
+
+.trasa {
+    font-size: 30px;
+}
+
+input, label {
+    display: inline-block;
+}
