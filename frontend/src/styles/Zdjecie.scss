@@ -1,0 +1,38 @@
+.images-container {
+    margin: 10px auto;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    .przekroczenie {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        margin: 10px 0;
+        border-bottom: 2px solid rgb(134, 134, 134);
+        .img-section {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 10px;
+            justify-content: flex-end;
+            .top-content {
+                margin-bottom: auto;
+            }
+            button {
+                width: auto;
+                margin: 20px 0;
+                padding: 10px 5px;
+                background-color: #903749;
+                color: rgb(228, 228, 228);
+                border: 1px solid #903749;
+                border-radius: 5px;
+                box-shadow: 0 3px 3px rgb(139, 139, 139);
+                transition: 0.2s;
+                &:hover {
+                    background-color: #b8475d;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    
+}

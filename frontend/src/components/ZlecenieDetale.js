@@ -99,7 +99,7 @@ const Zleceniedetale = () => {
             </div>
             <div className='vid-info'>
                 <h2>Nagranie z przelotu</h2>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/EaYYbW-P1mI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe width="560" controls="2" height="315" title="Drone video" src={"https://www.youtube.com/embed/EaYYbW-P1mI?autoplay=0&showinfo=0&autohide=1"} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
     );

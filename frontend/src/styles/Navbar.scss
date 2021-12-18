@@ -1,6 +1,7 @@
 $base-color1: #2B2E4A;
 $base-color1: #E84545;
 $base-color1: #903749;
+$light-text: rgb(228, 228, 228);
 
 * {
   box-sizing: border-box;
@@ -16,6 +17,9 @@ $base-color1: #903749;
   height: 60px;
   div {
     margin: auto 10px;
+    transition: 0.3s;
+  }
+  a {
     transition: 0.3s;
   }
   .nav-logo {

@@ -6,6 +6,8 @@ import Zlecenia from './components/Zlecenia';
 import Pomiaryfiltry from './components/PomiaryFiltry';
 import Pomiarytab from './components/PomiaryTab';
 import Zleceniedetale from './components/ZlecenieDetale';
+import Zdjecie from './components/Zdjecie';
+import Filterimages from './components/FilterImages';
 
 function App() {
   return (
@@ -32,7 +34,8 @@ function App() {
           </Route>
           <Route path='/zdj'>
             <>
-
+              <Filterimages />
+              <Zdjecie />
             </>
           </Route>
         </Switch>
