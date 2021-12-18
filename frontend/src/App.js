@@ -8,6 +8,7 @@ import Pomiarytab from './components/PomiaryTab';
 import Zleceniedetale from './components/ZlecenieDetale';
 import Zdjecie from './components/Zdjecie';
 import Filterimages from './components/FilterImages';
+import './App.scss'
 
 function App() {
   return (

@@ -1,8 +1,10 @@
+@import '../App.scss';
+
 li {
     width: 90%;
     height: 50px;
-    background-color: #903749;
-    color: rgb(228, 228, 228);
+    background-color: $base-color3;
+    color: $light-border;
     border-radius: 5px;
     margin: 5px auto;
     padding: 10px 10px;
@@ -10,7 +12,7 @@ li {
     justify-content: space-between;
     transition: 0.1s;
     &:hover {
-        background-color: #722b39;
+        background-color: $base-color3-hover;
         cursor: pointer;
     }
 }
@@ -21,7 +23,7 @@ ul {
 
 a {
     text-decoration: none;
-    color: rgb(228, 228, 228);
+    color: $light-border;
     display: flex;
     flex-direction: column;
     justify-content: center;

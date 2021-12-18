@@ -1,0 +1,40 @@
+$base-color1: #2B2E4A;
+$base-color2: #E84545;
+$base-color3: #903749;
+$base-color3-hover: #b8475d;
+$light-text: rgb(202, 202, 202);
+$light-border: rgb(228, 228, 228);
+$shadow-color: gray;
+
+
+@mixin scrollbars($size, $foreground-color, $background-color, $margin) {
+    // For Google Chrome
+    &::-webkit-scrollbar {
+      width:  $size;
+      height: $size;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: $foreground-color;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: $background-color;
+      margin: $margin 10px;
+    }
+  
+    // For Internet Explorer
+    & {
+      scrollbar-face-color: $foreground-color;
+      scrollbar-track-color: $background-color;
+    }
+  }
+
+
+  * {
+    @include scrollbars(10px, rgb(219, 219, 219), rgb(255, 255, 255), 0);
+  }
+
+.img-info-container, .img-info, .pom-info {
+    @include scrollbars(10px, rgb(219, 219, 219), rgb(255, 255, 255), 10px);
+}

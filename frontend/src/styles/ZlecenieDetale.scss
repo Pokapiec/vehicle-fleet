@@ -1,3 +1,13 @@
+@import '../App.scss';
+
+@mixin bordered {
+    margin: 20px auto;
+    border: 1px solid $base-color1;
+    border-radius: 10px;
+    width: 90%;
+}
+
+
 .zlecenie-detale {
     h1 {
         text-align: center;
@@ -8,21 +18,15 @@
         margin: 30px 40px;
     }
     .zl-info {
+        @include bordered();
         padding: 20px 30px;
-        margin: 10px auto;
-        border: 1px solid black;
-        border-radius: 10px;
-        width: 90%;
         height: auto;
         p {
             margin: 5px;
         }
     }
     .pom-info {
-        margin: 10px auto;
-        border: 1px solid black;
-        border-radius: 10px;
-        width: 90%;
+        @include bordered();
         height: 300px;
         overflow: auto;
         .pomiary-tab {
@@ -38,10 +42,7 @@
         }
     }
     .img-info {
-        margin: 10px auto;
-        border: 1px solid black;
-        border-radius: 10px;
-        width: 90%;
+        @include bordered();
         height: 300px;
         overflow: auto;
     }

@@ -1,7 +1,4 @@
-$base-color1: #2B2E4A;
-$base-color1: #E84545;
-$base-color1: #903749;
-$light-text: rgb(228, 228, 228);
+@import '../App.scss';
 
 * {
   box-sizing: border-box;
@@ -12,8 +9,8 @@ $light-text: rgb(228, 228, 228);
 .navbar {
   display: flex;
   justify-content: flex-end;
-  background-color: #2B2E4A;
-  color: rgb(228, 228, 228);
+  background-color: $base-color1;
+  color: $light-text;
   height: 60px;
   div {
     margin: auto 10px;
@@ -26,7 +23,7 @@ $light-text: rgb(228, 228, 228);
     margin-right: auto;
   }
   div:hover, a:hover {
-    color: #E84545;
+    color: $base-color2;
     cursor: pointer;
   }
   
