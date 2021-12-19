@@ -16,7 +16,7 @@ const Filterimages = () => {
             </div>
 
             <div className='selectors'>
-                <div>
+                <div className='selector-elem'>
                     <input id='trasa-img' type="text" list="paths" placeholder='Trasa' />
                     <datalist id="paths">
                         <option>Puszcza Kampinoska</option>

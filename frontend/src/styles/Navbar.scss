@@ -14,7 +14,6 @@
   height: 60px;
   div {
     margin: auto 10px;
-    transition: 0.3s;
   }
   a {
     transition: 0.3s;
@@ -22,9 +21,15 @@
   .nav-logo {
     margin-right: auto;
   }
-  div:hover, a:hover {
+  a:hover {
     color: $base-color2;
     cursor: pointer;
   }
   
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    font-size: small;
+  }
 }

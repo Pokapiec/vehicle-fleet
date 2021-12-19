@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Zlecenia = () => {
     return (
-        <main>
+        <main className='zlecenia'>
             <ul>
                 <Link to='/zlecenie/1'>
                     <li>

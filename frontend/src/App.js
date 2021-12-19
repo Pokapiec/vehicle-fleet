@@ -39,6 +39,11 @@ function App() {
               <Zdjecie />
             </>
           </Route>
+          <Route path='/logowanie'>
+            <div>
+              Nie ma logowania :)
+            </div>
+          </Route>
         </Switch>
 
       </Router>

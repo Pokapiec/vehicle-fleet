@@ -9,7 +9,7 @@
     box-shadow: 0 0 5px gray;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-evenly;
     color: $base-color1;
     .filter-section {
         padding: 10px;
@@ -26,7 +26,10 @@
         margin: 0 10px;
     }
     .labels {
-        margin: 20px 5px;
+        margin: 10px 5px;
+        div {
+            margin: 20px 0;
+        }
     }
     .dates {
         max-width: 180px;
@@ -39,6 +42,15 @@
         display: inline-block;
         margin: 3px;
     }
+    input {
+        padding: 5px 10px;
+        margin: 5px auto;
+        display: inline-block;
+        border-radius: 10px;
+        // padding: 3px 6px;
+        border: 1px solid $base-color1;
+        
+    }
 
 }
 
@@ -47,4 +59,12 @@ input:hover {
 }
 .dates-section {
     display: flex;
+}
+
+@media (max-width: 600px) {
+    .dates {
+        input {
+            width: 120px;
+        }
+    }
 }

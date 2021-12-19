@@ -1,11 +1,21 @@
-$base-color1: #2B2E4A;
+$base-color1: #3b3b3f;
 $base-color2: #E84545;
-$base-color3: #903749;
+$base-color3: #8d4a58;
+
+$base-color3-backup: #903749;
+$base-color1-backup: #2B2E4A;
+
 $base-color3-hover: #b8475d;
 $light-text: rgb(202, 202, 202);
 $light-border: rgb(228, 228, 228);
 $shadow-color: gray;
 
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Quicksand&display=swap');
+
+body {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-family: 'Quicksand', sans-serif;
+}
 
 @mixin scrollbars($size, $foreground-color, $background-color, $margin) {
     // For Google Chrome

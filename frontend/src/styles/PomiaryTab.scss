@@ -44,7 +44,9 @@ tbody {
         transition: 0.2s;
         &:hover {
             cursor: pointer;
-            background-color: $base-color2;
+            // background-color: $light-border;
+            opacity: 70%;
+            // filter: brightness(0%);
         }
     }
 }
