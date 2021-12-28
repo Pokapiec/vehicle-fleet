@@ -4,6 +4,7 @@ from django.db import models
 
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class CustomAccountManager(BaseUserManager):
@@ -40,10 +41,115 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(default=timezone.now)
     is_staff = models.BooleanField(default=False)
 
-
     objects = CustomAccountManager()
 
     USERNAME_FIELD = 'email'
 
     def __str__(self):
         return self.email
+
+
+class Klient(models.Model):
+    nazwa = models.CharField(max_length=150, unique=True)
+    nip = models.PositiveIntegerField(
+        validators=[MinValueValidator(1_000_000_000), MaxValueValidator(9_999_999_999)], unique=True, blank=True, null=True)
+    czy_naukowiec = models.BooleanField(default=False)
+
+    user = models.OneToOneField(
+        'User', on_delete=models.CASCADE, related_name="klient")
+
+
+class Film(models.Model):
+    url = models.URLField()
+
+
+class DocelowaTrasa(models.Model):
+    nazwa = models.CharField(max_length=150, unique=True)
+
+
+class Model(models.Model):
+    TYP = [
+        ('D', 'Dron'),
+        ('L', 'Łódka'),
+    ]
+    MARKA = [
+        ('DJI', 'DJI'),
+        ('SYM', 'Syma'),
+        ('HUB', 'Hubsan'),
+        ('BSH', 'Berkshire')
+    ]
+
+    typ = models.CharField(
+        max_length=1,
+        choices=TYP
+    )
+
+    marka = models.CharField(
+        max_length=3,
+        choices=MARKA
+    )
+
+    kod_modelu = models.CharField(max_length=50, unique=True)
+
+
+class MierzonaWielkosc(models.Model):
+    nazwa = models.CharField(max_length=150, unique=True)
+    norma_min = models.FloatField(blank=True, null=True)
+    norma_max = models.FloatField(blank=True, null=True)
+
+
+class Pojazd(Model):
+    numer_seryjny = models.CharField(max_length=50)
+
+
+class Pomiar(models.Model):
+    timestamp = models.DateTimeField()
+    wartosc = models.FloatField()
+
+    mierzona_wielkosc = models.ForeignKey(
+        'MierzonaWielkosc', on_delete=models.CASCADE)
+    pojazd = models.ForeignKey(
+        'Pojazd', on_delete=models.CASCADE, related_name='pomiary')
+
+
+class Zdjecie(models.Model):
+    url = models.URLField()
+    timestamp = models.DateTimeField()
+
+    pojazd = models.ForeignKey(
+        'Pojazd', on_delete=models.CASCADE, related_name='zdjecia')
+
+
+class Polozenie(models.Model):
+    timestamp = models.DateTimeField()
+    szerokosc_geo = models.DecimalField(max_digits=9, decimal_places=6)
+    dlugosc_geo = models.DecimalField(max_digits=9, decimal_places=6)
+
+    pojazd = models.ForeignKey(
+        'Pojazd', on_delete=models.CASCADE, related_name='polozenia')
+
+
+class Przekroczenie(models.Model):
+    timestamp = models.DateTimeField()
+
+    zdjecie = models.ForeignKey('Zdjecie', on_delete=models.DO_NOTHING)
+    polozenie = models.ForeignKey('Polozenie', on_delete=models.DO_NOTHING)
+    pomiar = models.ManyToManyField('Pomiar')
+    pojazd = models.ForeignKey(
+        'Pojazd', on_delete=models.CASCADE, related_name='przekroczenia')
+
+
+class Zlecenie(models.Model):
+    data_powstania = models.DateTimeField(auto_now_add=True)
+    planowana_data_realizacji = models.DateTimeField()
+    rozpoczecie_realizacji = models.DateTimeField()
+    koniec_realizacji = models.DateTimeField()
+
+    pojazd = models.ForeignKey(
+        'Pojazd', on_delete=models.DO_NOTHING, related_name='zlecenia')
+    docelowa_trasa = models.ForeignKey(
+        'DocelowaTrasa', on_delete=models.DO_NOTHING, related_name='zlecenia')
+    film = models.ForeignKey(
+        'Film', on_delete=models.CASCADE, related_name='zlecenia')
+    klient = models.ForeignKey(
+        'Klient', on_delete=models.DO_NOTHING, related_name='zlecenia')
