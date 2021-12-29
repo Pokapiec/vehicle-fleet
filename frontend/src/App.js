@@ -1,5 +1,5 @@
 import './App.scss'
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { MemoryRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Zlecenia from './components/Zlecenia';
