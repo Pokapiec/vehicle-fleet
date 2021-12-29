@@ -2,7 +2,7 @@ from rest_framework import serializers
 from datetime import timedelta
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from .models import Zlecenie, Pojazd, Pomiar, DocelowaTrasa, Polozenie
+from .models import Zlecenie, Pojazd, Pomiar, Polozenie
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -53,11 +53,13 @@ class GrupaPomiarowSerializer(serializers.ModelSerializer):
 class GrupaPrzekroczenSerializer(serializers.ModelSerializer):
     czujniki = serializers.SerializerMethodField()
     zdjecie = serializers.SerializerMethodField()
+    id_zlecenia = serializers.SerializerMethodField()
+    trasa = serializers.SerializerMethodField()
 
     class Meta:
         model = Polozenie
         fields = ['id', 'timestamp', 'szerokosc_geo',
-                  'dlugosc_geo', 'zdjecie', 'czujniki']
+                  'dlugosc_geo', 'zdjecie', 'id_zlecenia', 'trasa', 'czujniki']
 
     def get_czujniki(self, instance):
         lower_timestamp = instance.timestamp - timedelta(milliseconds=100)
@@ -76,6 +78,26 @@ class GrupaPrzekroczenSerializer(serializers.ModelSerializer):
             return None
 
         return zdjecia[0].url
+
+    def get_id_zlecenia(self, instance):
+        zlecenia = Zlecenie.objects.filter(
+            pojazd__id=instance.pojazd.id,
+            rozpoczecie_realizacji__lte=instance.timestamp,
+            koniec_realizacji__gte=instance.timestamp)
+
+        if len(zlecenia) == 0:
+            return None
+        return zlecenia[0].id
+
+    def get_trasa(self, instance):
+        zlecenia = Zlecenie.objects.filter(
+            pojazd__id=instance.pojazd.id,
+            rozpoczecie_realizacji__lte=instance.timestamp,
+            koniec_realizacji__gte=instance.timestamp)
+
+        if len(zlecenia) == 0:
+            return None
+        return zlecenia[0].docelowa_trasa.nazwa
 
 
 class ZlecenieDetalSerializer(serializers.ModelSerializer):
@@ -131,3 +153,41 @@ class ZlecenieDetalSerializer(serializers.ModelSerializer):
                     polozenia_z_przekroczeniami.append(nowe_przekroczenia[0])
 
         return GrupaPrzekroczenSerializer(polozenia_z_przekroczeniami, many=True, read_only=True).data
+
+
+class GrupaPomiarowDetalSerializer(serializers.ModelSerializer):
+    czujniki = serializers.SerializerMethodField()
+    id_zlecenia = serializers.SerializerMethodField()
+    trasa = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Polozenie
+        fields = ['id', 'id_zlecenia', 'timestamp', 'trasa', 'szerokosc_geo',
+                  'dlugosc_geo', 'czujniki']
+
+    def get_czujniki(self, instance):
+        lower_timestamp = instance.timestamp - timedelta(milliseconds=100)
+        higher_timestamp = instance.timestamp + timedelta(milliseconds=100)
+        pomiary = instance.pojazd.pomiary.filter(
+            timestamp__lte=higher_timestamp, timestamp__gte=lower_timestamp).order_by('mierzona_wielkosc__nazwa')
+        return PomiarSerializer(pomiary, many=True).data
+
+    def get_id_zlecenia(self, instance):
+        zlecenia = Zlecenie.objects.filter(
+            pojazd__id=instance.pojazd.id,
+            rozpoczecie_realizacji__lte=instance.timestamp,
+            koniec_realizacji__gte=instance.timestamp)
+
+        if len(zlecenia) == 0:
+            return None
+        return zlecenia[0].id
+
+    def get_trasa(self, instance):
+        zlecenia = Zlecenie.objects.filter(
+            pojazd__id=instance.pojazd.id,
+            rozpoczecie_realizacji__lte=instance.timestamp,
+            koniec_realizacji__gte=instance.timestamp)
+
+        if len(zlecenia) == 0:
+            return None
+        return zlecenia[0].docelowa_trasa.nazwa
