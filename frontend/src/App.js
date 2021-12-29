@@ -11,7 +11,7 @@ import { Authenticated } from './Context';
 
 
 function App() {
-  const [loggedIn, setloggedIn] = useState(false);
+  const [loggedIn, setloggedIn] = useState(localStorage.getItem('loggedIn') === 'true' ?  localStorage.getItem('loggedIn') : false);
 
   return (
     <div className="App">

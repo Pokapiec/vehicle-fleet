@@ -8,6 +8,7 @@ const Navbar = () => {
     const { loggedIn, setloggedIn } = useContext(Authenticated);
     const logout = () => {
         setloggedIn(false)
+        localStorage.setItem('loggedIn', false)
     }
     return (
         <nav className='navbar'>
