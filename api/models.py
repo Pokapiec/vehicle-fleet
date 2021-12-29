@@ -65,6 +65,9 @@ class Klient(models.Model):
 class Film(models.Model):
     url = models.URLField()
 
+    def __str__(self):
+        return self.url
+
 
 class DocelowaTrasa(models.Model):
     nazwa = models.CharField(max_length=150, unique=True)
@@ -106,6 +109,9 @@ class MierzonaWielkosc(models.Model):
     norma_min = models.FloatField(blank=True, null=True)
     norma_max = models.FloatField(blank=True, null=True)
 
+    def __str__(self):
+        return self.nazwa
+
 
 class Pojazd(models.Model):
     numer_seryjny = models.CharField(max_length=50)
@@ -119,11 +125,15 @@ class Pojazd(models.Model):
 class Pomiar(models.Model):
     timestamp = models.DateTimeField()
     wartosc = models.FloatField()
+    czy_norma_przekroczona = models.BooleanField(default=False)
 
     mierzona_wielkosc = models.ForeignKey(
         'MierzonaWielkosc', on_delete=models.CASCADE)
     pojazd = models.ForeignKey(
         'Pojazd', on_delete=models.CASCADE, related_name='pomiary')
+
+    def __str__(self):
+        return f'{self.pojazd.numer_seryjny} | {self.mierzona_wielkosc.nazwa} | {self.timestamp}'
 
 
 class Zdjecie(models.Model):
@@ -141,16 +151,6 @@ class Polozenie(models.Model):
 
     pojazd = models.ForeignKey(
         'Pojazd', on_delete=models.CASCADE, related_name='polozenia')
-
-
-class Przekroczenie(models.Model):
-    timestamp = models.DateTimeField()
-
-    zdjecie = models.ForeignKey('Zdjecie', on_delete=models.DO_NOTHING)
-    polozenie = models.ForeignKey('Polozenie', on_delete=models.DO_NOTHING)
-    pomiar = models.ManyToManyField('Pomiar')
-    pojazd = models.ForeignKey(
-        'Pojazd', on_delete=models.CASCADE, related_name='przekroczenia')
 
 
 class Zlecenie(models.Model):
