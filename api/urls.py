@@ -9,6 +9,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('logout/', BlackListTokenView.as_view(), name='blacklist'),
 
-    path('zlecenia/<int:pk>', ZlecenieDetalView.as_view(), name='zlecenie_detal'),
+    path('zlecenia/<int:pk>/', ZlecenieDetalView.as_view(), name='zlecenie_detal'),
     path('zlecenia/', ZlecenieListView.as_view(), name='zlecenia_lista'),
 ]
