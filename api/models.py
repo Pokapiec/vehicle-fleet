@@ -58,6 +58,9 @@ class Klient(models.Model):
     user = models.OneToOneField(
         'User', on_delete=models.CASCADE, related_name="klient")
 
+    def __str__(self):
+        return self.nazwa
+
 
 class Film(models.Model):
     url = models.URLField()
@@ -65,6 +68,9 @@ class Film(models.Model):
 
 class DocelowaTrasa(models.Model):
     nazwa = models.CharField(max_length=150, unique=True)
+
+    def __str__(self):
+        return self.nazwa
 
 
 class Model(models.Model):
@@ -91,6 +97,9 @@ class Model(models.Model):
 
     kod_modelu = models.CharField(max_length=50, unique=True)
 
+    def __str__(self):
+        return self.marka + " | " + self.kod_modelu
+
 
 class MierzonaWielkosc(models.Model):
     nazwa = models.CharField(max_length=150, unique=True)
@@ -98,8 +107,13 @@ class MierzonaWielkosc(models.Model):
     norma_max = models.FloatField(blank=True, null=True)
 
 
-class Pojazd(Model):
+class Pojazd(models.Model):
     numer_seryjny = models.CharField(max_length=50)
+
+    model = models.ForeignKey('Model', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.model.marka + " | " + self.numer_seryjny
 
 
 class Pomiar(models.Model):
@@ -140,16 +154,25 @@ class Przekroczenie(models.Model):
 
 
 class Zlecenie(models.Model):
+    TYP = [
+        ('D', 'Dron'),
+        ('L', 'Łódka'),
+    ]
+
     data_powstania = models.DateTimeField(auto_now_add=True)
     planowana_data_realizacji = models.DateTimeField()
-    rozpoczecie_realizacji = models.DateTimeField()
-    koniec_realizacji = models.DateTimeField()
+    rozpoczecie_realizacji = models.DateTimeField(null=True, blank=True)
+    koniec_realizacji = models.DateTimeField(null=True, blank=True)
+    typ_pojazdu = models.CharField(max_length=1, choices=TYP)
 
     pojazd = models.ForeignKey(
-        'Pojazd', on_delete=models.DO_NOTHING, related_name='zlecenia')
+        'Pojazd', on_delete=models.DO_NOTHING, related_name='zlecenia', null=True, blank=True)
     docelowa_trasa = models.ForeignKey(
         'DocelowaTrasa', on_delete=models.DO_NOTHING, related_name='zlecenia')
     film = models.ForeignKey(
-        'Film', on_delete=models.CASCADE, related_name='zlecenia')
+        'Film', on_delete=models.CASCADE, related_name='zlecenia', null=True, blank=True)
     klient = models.ForeignKey(
         'Klient', on_delete=models.DO_NOTHING, related_name='zlecenia')
+
+    def __str__(self):
+        return f'{self.klient.nazwa} | {self.docelowa_trasa.nazwa} | {self.planowana_data_realizacji}'

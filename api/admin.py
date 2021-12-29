@@ -3,9 +3,21 @@ from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import User
+from .models import User, Pojazd, Zlecenie, Pomiar, Polozenie, Film, DocelowaTrasa, Klient, MierzonaWielkosc, Przekroczenie, Zdjecie, Model
 
 # Register your models here.
+
+admin.site.register(Pojazd)
+admin.site.register(Zlecenie)
+admin.site.register(Pomiar)
+admin.site.register(Polozenie)
+admin.site.register(Film)
+admin.site.register(DocelowaTrasa)
+admin.site.register(Klient)
+admin.site.register(MierzonaWielkosc)
+admin.site.register(Przekroczenie)
+admin.site.register(Zdjecie)
+admin.site.register(Model)
 
 
 class UserCreationForm(forms.ModelForm):
