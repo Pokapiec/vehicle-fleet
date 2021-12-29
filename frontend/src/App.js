@@ -1,5 +1,5 @@
 import './App.scss'
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { MemoryRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Zlecenia from './components/Zlecenia';
@@ -11,7 +11,7 @@ import { Authenticated } from './Context';
 
 
 function App() {
-  const [loggedIn, setloggedIn] = useState(false);
+  const [loggedIn, setloggedIn] = useState(localStorage.getItem('loggedIn') === 'true' ?  localStorage.getItem('loggedIn') : false);
 
   return (
     <div className="App">
