@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Authenticated } from '../Context';
 import '../styles/Navbar.scss';
 import { Link } from "react-router-dom";
 
 
 const Navbar = () => {
+    const { loggedIn, setloggedIn } = useContext(Authenticated);
+    const logout = () => {
+        setloggedIn(false)
+    }
     return (
         <nav className='navbar'>
-            
             <div className='nav-logo'><Link to='/'>Panel klienta</Link></div>
             <Link to='/zdj'>
                 <div className='nav-btn'>Zdjęcia przekroczeń</div>
@@ -17,8 +21,11 @@ const Navbar = () => {
             <Link to='/pomiary'>
                 <div className='nav-btn'>Pomiary</div>
             </Link>
-            <Link to='/logowanie'>
-                <div className='nav-btn'>Wyloguj</div>
+            <Link to='/login'>
+                {loggedIn ?
+                    <div className='nav-btn' onClick={logout}>Wyloguj</div> :
+                    <div className='nav-btn'>Zaloguj</div>
+                }
             </Link>
         </nav>
     );

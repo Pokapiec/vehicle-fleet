@@ -1,52 +1,59 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import React from 'react';
+import './App.scss'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
-import Filters from './components/ZleceniaFiltry';
 import Zlecenia from './components/Zlecenia';
-import Pomiaryfiltry from './components/PomiaryFiltry';
 import Pomiarytab from './components/PomiaryTab';
 import Zleceniedetale from './components/ZlecenieDetale';
 import Zdjecie from './components/Zdjecie';
-import Filterimages from './components/FilterImages';
-import './App.scss'
+import Login from './components/Login';
+import { Authenticated } from './Context';
+
 
 function App() {
+  const [loggedIn, setloggedIn] = useState(false);
+
   return (
     <div className="App">
-      <Router>
-        <Navbar />
-        <Switch>
-          <Route path='/' exact>
-            <>
-              <Filters />
-              <Zlecenia />
-            </>
-          </Route>
-          <Route path='/pomiary'>
-            <>
-              <Pomiaryfiltry />
-              <Pomiarytab />
-            </>
-          </Route>
-          <Route path='/zlecenie/:id'>
-            <>
-              <Zleceniedetale />
-            </>
-          </Route>
-          <Route path='/zdj'>
-            <>
-              <Filterimages />
-              <Zdjecie />
-            </>
-          </Route>
-          <Route path='/logowanie'>
-            <div>
-              Nie ma logowania :)
-            </div>
-          </Route>
-        </Switch>
+      <Authenticated.Provider value={{ loggedIn, setloggedIn }}>
+        <Router>
+          <Navbar />
+          <Switch>
+            <Route path='/login'>
+              {loggedIn ? 
+              <Zlecenia /> : 
+              <Login />}
+            </Route>
+            <Route path='/' exact>
+              {loggedIn ?
+                <Zlecenia /> :
+                <Redirect to="/login" />}
+            </Route>
+            <Route path='/pomiary'>
+              {loggedIn ?
+                <Pomiarytab /> :
+                <Redirect to="/login" />}
+            </Route>
+            <Route path='/zlecenie/:id'>
+              {loggedIn ?
+                <Zleceniedetale /> :
+                <Redirect to="/login" />}
+            </Route>
+            <Route path='/zdj'>
+              {loggedIn ?
+                <Zdjecie /> :
+                <Redirect to="/login" />}
+            </Route>
+            <Route path='/logowanie'>
+              <div>
+                Nie ma logowania !
+              </div>
+            </Route>
+          </Switch>
 
-      </Router>
+        </Router>
+      </Authenticated.Provider>
+
     </div>
   );
 }

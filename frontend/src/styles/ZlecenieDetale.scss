@@ -57,4 +57,9 @@
             margin: 10px auto;
         }
     }
+    @media (max-width: 800px) {
+        table {
+            font-size: 10px;
+        }
+    }
 }
