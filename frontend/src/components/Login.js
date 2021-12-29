@@ -1,16 +1,34 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import '../styles/Login.scss';
 import { useForm } from 'react-hook-form';
 import { Authenticated } from '../Context';
+import axiosInstance from '../axios.js';
 
 
 const Login = () => {
-    const {loggedIn, setloggedIn} = useContext(Authenticated)
+    const { loggedIn, setloggedIn } = useContext(Authenticated)
+    const [warning, setwarning] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const submition = data => {
-        console.log(loggedIn)
-        setloggedIn(true)
-        console.log(data)
+    const submition = async (data) => {
+        try {
+            setwarning(false)
+            const res = await axiosInstance.post('token/', {
+                email: data.login,
+                password: data.password,
+            })
+            console.log(res)
+            localStorage.setItem('access_token', res.data.access);
+            localStorage.setItem('refresh_token', res.data.refresh);
+            localStorage.setItem('is_refreshing', false);
+            axiosInstance.defaults.headers['Authorization'] =
+                'JWT ' + localStorage.getItem('access_token');
+            
+            setloggedIn(true)
+            localStorage.setItem('loggedIn', true);
+            console.log(data)
+        } catch (error) {
+            setwarning(true)
+        }
     };
 
     return (
@@ -23,6 +41,8 @@ const Login = () => {
                 <input name='password' className='field' type="password" placeholder='Hasło' {...register('password', { required: true, message: 'Incorrect password', minLength: 4 })} />
                 {errors.login && <p>Login jest wymagany</p>}
                 {errors.password && <p>Hasło musi zawierać conajmniej 4 znaki</p>}
+                {warning && <p>Złe dane logowania</p>}
+
                 <input className='submit-btn' type="submit" value="Zatwierdź" />
             </form>
         </main>

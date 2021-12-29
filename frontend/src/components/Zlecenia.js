@@ -1,92 +1,51 @@
-import React from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import '../styles/Zlecenia.scss';
 import { Link } from "react-router-dom";
 import Filters from './ZleceniaFiltry';
+import axiosInstance from '../axios.js';
+import { Authenticated } from '../Context';
+
 
 const Zlecenia = () => {
+    const { setloggedIn } = useContext(Authenticated)
+    const [zlecenia, setZlecenia] = useState([]);
+    useEffect(async () => {
+        console.log(localStorage.getItem('loggedIn'))
+        try {
+            const data = await axiosInstance.get('zlecenia/')
+            setZlecenia(data.data)
+        } catch (error) {
+            setloggedIn(false)
+            localStorage.setItem('loggedIn', false);
+        }
+    }, [])
     return (
         <>
         <Filters />
             <main className='zlecenia'>
                 <ul>
-                    <Link to='/zlecenie/1'>
+                    {zlecenia.map(item => (
+                        <Link to={{pathname: `/zlecenie/${item.id}`,
+                        state: item.id}}  key={item.id}>
                         <li>
                             <div>
-                                Zlecenie 1
+                                Zlecenie {item.id}
                             </div>
                             <div>
-                                Dron
+                                {item.typ_pojazdu === 'D'?"Dron":"Łódka"}
                             </div>
                             <div>
-                                21.06.2021
+                                {item.planowana_data_realizacji.slice(0,10)}
                             </div>
                             <div>
-                                Puszcza Kampinoska
+                                {item.trasa}
                             </div>
                             <div>
-                                Zaplanowane
+                                {item.koniec_realizacji?"Zakończona":"Planowana"}
                             </div>
                         </li>
                     </Link>
-                    <Link to='/zlecenie/2'>
-                        <li>
-                            <div>
-                                Zlecenie 1
-                            </div>
-                            <div>
-                                Dron
-                            </div>
-                            <div>
-                                21.06.2021
-                            </div>
-                            <div>
-                                Puszcza Kampinoska
-                            </div>
-                            <div>
-                                Zaplanowane
-                            </div>
-                        </li>
-                    </Link>
-                    <Link to='/zlecenie/3'>
-                        <li>
-                            <div>
-                                Zlecenie 1
-                            </div>
-                            <div>
-                                Dron
-                            </div>
-                            <div>
-                                21.06.2021
-                            </div>
-                            <div>
-                                Puszcza Kampinoska
-                            </div>
-                            <div>
-                                Zaplanowane
-                            </div>
-                        </li>
-                    </Link>
-                    <Link to='/zlecenie/3'>
-
-                        <li>
-                            <div>
-                                Zlecenie 1
-                            </div>
-                            <div>
-                                Dron
-                            </div>
-                            <div>
-                                21.06.2021
-                            </div>
-                            <div>
-                                Puszcza Kampinoska
-                            </div>
-                            <div>
-                                Zaplanowane
-                            </div>
-                        </li>
-                    </Link>
-
+                    ))}
 
                 </ul>
             </main>

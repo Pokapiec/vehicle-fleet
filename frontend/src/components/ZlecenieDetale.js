@@ -1,16 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/ZlecenieDetale.scss'
+import { useLocation } from 'react-router-dom'
+import axiosInstance from '../axios.js';
+
 
 const Zleceniedetale = () => {
+    const [details, setdetails] = useState({});
+    const [tabData, setTabData] = useState({});
+
+    const loc = useLocation()
+
+    const flattenData = (data) => {
+        let arr = []
+        data.forEach(elem => {
+            elem.czujniki.forEach(inner => {
+                delete elem.czujniki
+                arr.push({ ...elem, ...inner })
+            })
+        })
+        return arr
+    }
+
+    useEffect(async () => {
+        const data = await axiosInstance.get(`zlecenia/${loc.state}/`)
+        setdetails(data.data)
+        console.log(data.data)
+        const tab =  flattenData(data.data.pomiary)
+        setTabData(tab)
+    }, [])
     return (
         <div className='zlecenie-detale'>
-            <h1>Zlecenie 1</h1>
+            <h1>Zlecenie {details.id}</h1>
             <div className='zl-info'>
-                <p><strong>Trasa:</strong> Puszcza Kampinoska</p>
-                <p><strong>Data planowa:</strong> 2021-10-12</p>
-                <p><strong>Data realizacji:</strong> -</p>
-                <p><strong>Status:</strong> Zaplanowane</p>
-                <p><strong>Pojazd:</strong> Dron</p>
+                <p><strong>Trasa: </strong>{details.trasa}</p>
+                <p><strong>Data planowa: </strong>{details.planowana_data_realizacji}</p>
+                <p><strong>Data rozpoczęcia: </strong>{details.rozpoczecie_realizacji}</p>
+                <p><strong>Data realizacji: </strong>{details.koniec_realizacji}</p>
+                {/* <p><strong>Status: </strong>Zaplanowane</p> */}
+                <p><strong>Pojazd: </strong>{details.typ_pojazdu === 'D' ? "Dron" : "Łódka"}</p>
 
             </div>
             <div className='pom-info'>
@@ -99,7 +126,7 @@ const Zleceniedetale = () => {
             </div>
             <div className='vid-info'>
                 <h2>Nagranie z przelotu</h2>
-                <iframe width="560" controls="2" height="315" title="Drone video" src={"https://www.youtube.com/embed/EaYYbW-P1mI?autoplay=0&showinfo=0&autohide=1"} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe width="560" controls="2" height="315" title="Drone video" src={"https://www.youtube.com/embed/EaYYbW-P1mI?autoplay=0&showinfo=0&autohide=1"} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
             </div>
         </div>
     );
