@@ -1,7 +1,19 @@
 from rest_framework import serializers
 from datetime import timedelta
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Zlecenie, Pojazd, Pomiar, DocelowaTrasa, Polozenie
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        try:
+            token['czy_naukowiec'] = user.klient.czy_naukowiec
+        except:
+            token['czy_naukowiec'] = False
+        return token
 
 
 class ZlecenieListaSerializer(serializers.ModelSerializer):
