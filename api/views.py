@@ -8,8 +8,8 @@ from datetime import timedelta, datetime
 from django.utils import timezone
 from dateutil import parser
 
-from .models import Zlecenie, Polozenie
-from .serializers import ZlecenieListaSerializer, ZlecenieDetalSerializer, MyTokenObtainPairSerializer, GrupaPomiarowDetalSerializer, GrupaPrzekroczenSerializer
+from .models import Zlecenie, Polozenie, Pomiar
+from .serializers import ZlecenieListaSerializer, ZlecenieDetalSerializer, MyTokenObtainPairSerializer, GrupaPrzekroczenSerializer, PomiarDetalSerializer
 
 from .permissions import TylkoKlient, TylkoNaukowiec, TylkoZleceniodawca
 
@@ -62,23 +62,40 @@ class PomiaryView(APIView):
             zlecenia = zlecenia.filter(id=request.query_params['zlecenie'])
 
         from_filter = parser.parse(
-            request.query_params['timestamp_from'] + " +01") if 'timestamp_from' in request.query_params else datetime.min
+            request.query_params['timestamp_from'] + " +01") if 'timestamp_from' in request.query_params else parser.parse('1900-01-01 00:00 +01')
         to_filter = parser.parse(
             request.query_params['timestamp_to'] + " +01") if 'timestamp_to' in request.query_params else timezone.now()
 
-        wszystkie_polozenia = []
+        wszystkie_pomiary = []
 
         for zlecenie in zlecenia:
-            polozenia = zlecenie.pojazd.polozenia.filter(
+            pomiary = zlecenie.pojazd.pomiary.filter(
                 timestamp__gte=zlecenie.rozpoczecie_realizacji,
                 timestamp__lte=zlecenie.koniec_realizacji)
 
-            polozenia = polozenia.filter(
+            pomiary = pomiary.filter(
                 timestamp__gte=from_filter, timestamp__lte=to_filter)
 
-            wszystkie_polozenia.append(polozenia)
+            if 'mierzona_wielkosc' in request.query_params:
+                pomiary = pomiary.filter(
+                    mierzona_wielkosc__nazwa=request.query_params['mierzona_wielkosc'])
 
-        return Response(GrupaPomiarowDetalSerializer(flatten(wszystkie_polozenia), many=True).data)
+            if 'wartosc_from' in request.query_params:
+                pomiary = pomiary.filter(
+                    wartosc__gte=request.query_params['wartosc_from'])
+
+            if 'wartosc_to' in request.query_params:
+                pomiary = pomiary.filter(
+                    wartosc__lte=request.query_params['wartosc_to'])
+
+            if 'przekroczenie' in request.query_params:
+                want_przekroczone = request.query_params['przekroczenie'] == 'true'
+                pomiary = pomiary.filter(
+                    czy_norma_przekroczona=want_przekroczone)
+
+            wszystkie_pomiary.append(pomiary)
+
+        return Response(PomiarDetalSerializer(flatten(wszystkie_pomiary), many=True).data)
 
 
 class PrzekroczeniaView(APIView):
