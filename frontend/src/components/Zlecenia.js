@@ -21,31 +21,56 @@ const Zlecenia = () => {
     }, [])
     return (
         <>
-        <Filters />
+            <Filters />
             <main className='zlecenia'>
                 <ul>
                     {zlecenia.map(item => (
-                        <Link to={{pathname: `/zlecenie/${item.id}`,
-                        state: item.id}}  key={item.id}>
+                        <Link to={{
+                            pathname: `/zlecenie/${item.id}`,
+                            state: item.id
+                        }} key={item.id}>
+                            <li>
+                                <div>
+                                    Zlecenie {item.id}
+                                </div>
+                                <div>
+                                    {item.typ_pojazdu === 'D' ? "Dron" : "Łódka"}
+                                </div>
+                                <div>
+                                    {item.planowana_data_realizacji.slice(0, 10)}
+                                </div>
+                                <div>
+                                    {item.trasa}
+                                </div>
+                                <div>
+                                    {item.koniec_realizacji ? "Zakończona" : "Planowana"}
+                                </div>
+                            </li>
+                        </Link>
+                    ))}
+
+                    {/* <Link to={{
+                        pathname: `/zlecenie/2`,
+                        state: 2
+                    }} key={2}>
                         <li>
                             <div>
-                                Zlecenie {item.id}
+                                Zlecenie 2
                             </div>
                             <div>
-                                {item.typ_pojazdu === 'D'?"Dron":"Łódka"}
+                                Dron
                             </div>
                             <div>
-                                {item.planowana_data_realizacji.slice(0,10)}
+                                2021-11-10
                             </div>
                             <div>
-                                {item.trasa}
+                                Kiełbów małopolski
                             </div>
                             <div>
-                                {item.koniec_realizacji?"Zakończona":"Planowana"}
+                                Zakonczona
                             </div>
                         </li>
-                    </Link>
-                    ))}
+                    </Link> */}
 
                 </ul>
             </main>

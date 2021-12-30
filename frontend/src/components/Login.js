@@ -3,9 +3,11 @@ import '../styles/Login.scss';
 import { useForm } from 'react-hook-form';
 import { Authenticated } from '../Context';
 import axiosInstance from '../axios.js';
+import { useHistory } from 'react-router-dom';
 
 
 const Login = () => {
+    const history = useHistory();
     const { loggedIn, setloggedIn } = useContext(Authenticated)
     const [warning, setwarning] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -22,10 +24,11 @@ const Login = () => {
             localStorage.setItem('is_refreshing', false);
             axiosInstance.defaults.headers['Authorization'] =
                 'JWT ' + localStorage.getItem('access_token');
-            
+
             setloggedIn(true)
             localStorage.setItem('loggedIn', true);
             console.log(data)
+            history.push('/')
         } catch (error) {
             setwarning(true)
         }
