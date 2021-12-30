@@ -35,8 +35,13 @@
         
     }
     .img-info-container {
-        display: flex;
-        flex-direction: row;
+        margin-top: 2em;
+        margin-bottom: 2em;
+        padding-bottom: 2em;
+        border-bottom: 1px solid $light-border;
+        display: grid;
+        // flex-direction: row;
+        grid-template-columns: repeat(2, 1fr);
         img {
             margin: 0px 40px;
         }

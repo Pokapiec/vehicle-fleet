@@ -44,9 +44,20 @@ tbody {
         transition: 0.2s;
         &:hover {
             cursor: pointer;
-            // background-color: $light-border;
-            opacity: 70%;
-            // filter: brightness(0%);
+            transform: scale(1.05);
+            background-color: $base-color3;
+        }
+        &:active {
+            filter: brightness(80%);
+            color: white;
+        }
+    }
+}
+
+.pomiary {
+    @media (max-width: 800px) {
+        table {
+            font-size: x-small;
         }
     }
 }

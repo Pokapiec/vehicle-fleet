@@ -1,6 +1,11 @@
 @import '../App.scss';
 
 .images-container {
+    img {
+        // transition: 0.3s;
+        transform: scale(0);
+        animation: comein 600ms forwards;
+    }
     margin: 10px auto;
     width: 90%;
     display: flex;
@@ -34,8 +39,21 @@
                     filter: brightness(120%);
                     cursor: pointer;
                 }
+                &:active {
+                    filter: brightness(80%);
+                    color: white;
+                }
             }
         }
     }
     
+}
+
+@keyframes comein {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
 }
