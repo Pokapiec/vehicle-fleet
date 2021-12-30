@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/ZleceniaFiltry.scss';
 
-const Filters = () => {
+const Filters = ({ setDateFromP, setDateFromR, setDateToP, setDateToR, setPath, setZapl, setUkonczone, setDron, setLodka }) => {
     return (
         <section className='filter-zl'>
             <div className='filter-section dates-section'>
@@ -11,18 +11,18 @@ const Filters = () => {
                 </div>
                 <div className='filter-section dates'>
                     <div>Od:</div>
-                    <input type="date" name="" id="" />
-                    <input type="date" name="" id="" />
+                    <input type="date" name="" id="" onChange={e => { setDateFromP(e.currentTarget.value) }} />
+                    <input type="date" name="" id="" onChange={e => { setDateFromR(e.currentTarget.value) }} />
                 </div>
                 <div className='filter-section dates'>
                     <div>Do:</div>
-                    <input type="date" name="" id="" />
-                    <input type="date" name="" id="" />
+                    <input type="date" name="" id="" onChange={e => { setDateToP(e.currentTarget.value) }} />
+                    <input type="date" name="" id="" onChange={e => { setDateToR(e.currentTarget.value) }} />
                 </div>
             </div>
 
             <div className='filter-section path'>
-                <input id='trasa' type="text" list="cars" placeholder='Wybierz trase' />
+                <input id='trasa' type="text" list="cars" placeholder='Wybierz trase' onChange={e => { setPath(e.currentTarget.value) }} />
                 <datalist id="cars">
                     <option>Puszcza Kampinoska</option>
                     <option>Wałbrzych</option>
@@ -34,35 +34,25 @@ const Filters = () => {
                         <h5>Status zlecenia</h5>
                         <div>
 
-                            <input type="checkbox" id='zaplan' />
+                            <input type="checkbox" id='zaplan' onChange={e => { setZapl(e.currentTarget.checked) }} />
                             <label htmlFor="zaplan">Zaplanowane</label>
                         </div>
                         <div>
-                            <input type="checkbox" id='ukon' />
+                            <input type="checkbox" id='ukon' onChange={e => { setUkonczone(e.currentTarget.checked) }}/>
                             <label htmlFor="ukon">Ukończone</label>
                         </div>
-                        <div>
-                            <input type="checkbox" id='odwol' />
-                            <label htmlFor="odwol">Odwołane</label>
-                        </div>
-
                     </span>
                     <span>
-                        <h5>Status zlecenia</h5>
+                        <h5>Pojazd</h5>
                         <div>
 
-                            <input type="checkbox" id='zaplan' />
-                            <label htmlFor="zaplan">Zaplanowane</label>
+                            <input type="checkbox" id='dron' onChange={e => { setDron(e.currentTarget.checked) }}/>
+                            <label htmlFor="dron">Dron</label>
                         </div>
                         <div>
-                            <input type="checkbox" id='ukon' />
-                            <label htmlFor="ukon">Ukończone</label>
+                            <input type="checkbox" id='lodka' onChange={e => { setLodka(e.currentTarget.checked) }}/>
+                            <label htmlFor="lodka">Łódka</label>
                         </div>
-                        <div>
-                            <input type="checkbox" id='odwol' />
-                            <label htmlFor="odwol">Odwołane</label>
-                        </div>
-
                     </span>
                 </div>
             </div>

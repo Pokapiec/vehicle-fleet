@@ -1,76 +1,96 @@
-import React from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import '../styles/PomiaryTab.scss'
 import Pomiaryfiltry from './PomiaryFiltry';
+import axiosInstance from '../axios.js';
+import { Authenticated } from '../Context';
+
 
 const Pomiarytab = () => {
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
+    const [path, setPath] = useState('');
+    const [issueNumber, setIssueNumber] = useState('');
+    const [low, setLow] = useState(0);
+    const [high, setHigh] = useState(0);
+    
+    const filterProps = {
+        setDateFrom: setDateFrom,
+        setDateTo: setDateTo,
+        setPath: setPath,
+        setIssueNumber: setIssueNumber,
+        setLow: setLow,
+        setHigh: setHigh
+    }
+
+    const [pomiary, setPomiary] = useState([]);
+    const [filtered, setFiltered] = useState([]);
+
+    const flattenData = (data) => {
+        let arr = []
+        data.forEach(elem => {
+            elem.czujniki.forEach(inner => {
+                // delete elem.czujniki
+                arr.push({ ...elem, ...inner })
+            })
+        })
+        return arr
+    }
+
+    useEffect(() => {
+        let condition = []
+        if(low) condition.push('elem.wartosc > low')
+        if(high) condition.push('elem.wartosc < high')
+        if(dateFrom) condition.push('Date.parse(elem.timestamp) > Date.parse(dateFrom)')
+        if(dateTo) condition.push('Date.parse(elem.timestamp) < Date.parse(dateTo)')
+        if(issueNumber) condition.push('elem.id == issueNumber')
+        if(path) condition.push('elem.trasa == path')
+
+        if(condition.length) {
+            let filtersApplied = pomiary.filter(elem => {
+                return eval(condition.join(' & '))
+            }) 
+            setFiltered(filtersApplied)
+        } else {
+            setFiltered(pomiary)
+        }
+    }, [dateFrom, dateTo, path, issueNumber, low, high]);
+
+    useEffect(async () => {
+        const data = await axiosInstance.get('pomiary/')
+        setPomiary(flattenData(data.data))
+        setFiltered(flattenData(data.data))
+    }, [])
+
     return (
-        <main>
-            <Pomiaryfiltry />
+        <main className='pomiary'>
+            <Pomiaryfiltry {...filterProps}/>
             <div>
                 <table>
                     <thead>
                         <tr>
-                            <th>Nr zlecenia</th>
+                            <th>Nr pomiaru</th>
                             <th>Trasa</th>
                             <th>timestamp</th>
-                            <th>Połozenie x</th>
-                            <th>Połozenie y</th>
-                            <th>CO</th>
-                            <th>pH</th>
-                            <th>Pb</th>
+                            <th>Długość geo</th>
+                            <th>Szerokość geo</th>
+                            <th>Wielkość</th>
+                            <th>Wartość</th>
+                            <th>Przekroczenie</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>0</td>
-                            <td>Słupsk</td>
-                            <td>2021-11-12</td>
-                            <td>40</td>
-                            <td>75</td>
-                            <td>22</td>
-                            <td>34</td>
-                            <td>38</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Żwirki</td>
-                            <td>2021-11-13</td>
-                            <td>34</td>
-                            <td>27</td>
-                            <td>54</td>
-                            <td>44</td>
-                            <td>51</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Muchomorki</td>
-                            <td>2021-11-14</td>
-                            <td>57</td>
-                            <td>97</td>
-                            <td>11</td>
-                            <td>5</td>
-                            <td>82</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Kościelisko</td>
-                            <td>2021-11-15</td>
-                            <td>95</td>
-                            <td>1</td>
-                            <td>51</td>
-                            <td>74</td>
-                            <td>57</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>San fransisko</td>
-                            <td>2021-11-16</td>
-                            <td>85</td>
-                            <td>72</td>
-                            <td>42</td>
-                            <td>55</td>
-                            <td>60</td>
-                        </tr>
+                        {filtered.map(item => (
+                            <tr key={item.id}>
+                                <td>{item.id}</td>
+                                <td>{item.trasa}</td>
+                                <td>{item.timestamp?item.timestamp.slice(0,10):item.timestamp}</td>
+                                <td>{item.dlugosc_geo}</td>
+                                <td>{item.szerokosc_geo}</td>
+                                <td>{item.mierzona_wielkosc}</td>
+                                <td>{item.wartosc}</td>
+                                <td>{item.czy_norma_przekroczona?"Tak":"Nie"}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
                 <div id='exports'>
