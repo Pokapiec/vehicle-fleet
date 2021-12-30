@@ -22,7 +22,7 @@ const Navbar = () => {
             <Link to='/pomiary'>
                 <div className='nav-btn'>Pomiary</div>
             </Link>
-            <Link to='/login'>
+            <Link to='/'>
                 {loggedIn ?
                     <div className='nav-btn' onClick={logout}>Wyloguj</div> :
                     <div className='nav-btn'>Zaloguj</div>

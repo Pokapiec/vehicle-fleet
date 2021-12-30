@@ -8,8 +8,11 @@
         border-radius: 5px;
         margin: 5px auto;
         padding: 10px 10px;
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        // justify-content: space-between;
+        grid-template-columns: 1.3fr 1fr 1.3fr 2fr 1fr;
+        align-items: center;
+        align-content: center;
         transition: 0.2s;
         &:hover {
             filter: brightness(120%);
