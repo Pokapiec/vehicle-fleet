@@ -155,22 +155,17 @@ class ZlecenieDetalSerializer(serializers.ModelSerializer):
         return GrupaPrzekroczenSerializer(polozenia_z_przekroczeniami, many=True, read_only=True).data
 
 
-class GrupaPomiarowDetalSerializer(serializers.ModelSerializer):
-    czujniki = serializers.SerializerMethodField()
+class PomiarDetalSerializer(serializers.ModelSerializer):
+    mierzona_wielkosc = serializers.StringRelatedField()
     id_zlecenia = serializers.SerializerMethodField()
     trasa = serializers.SerializerMethodField()
+    szerokosc_geo = serializers.SerializerMethodField()
+    dlugosc_geo = serializers.SerializerMethodField()
 
     class Meta:
-        model = Polozenie
-        fields = ['id', 'id_zlecenia', 'timestamp', 'trasa', 'szerokosc_geo',
-                  'dlugosc_geo', 'czujniki']
-
-    def get_czujniki(self, instance):
-        lower_timestamp = instance.timestamp - timedelta(milliseconds=100)
-        higher_timestamp = instance.timestamp + timedelta(milliseconds=100)
-        pomiary = instance.pojazd.pomiary.filter(
-            timestamp__lte=higher_timestamp, timestamp__gte=lower_timestamp).order_by('mierzona_wielkosc__nazwa')
-        return PomiarSerializer(pomiary, many=True).data
+        model = Pomiar
+        fields = ['id', 'id_zlecenia', 'timestamp', 'szerokosc_geo', 'dlugosc_geo',
+                  'mierzona_wielkosc', 'wartosc', 'czy_norma_przekroczona', 'trasa']
 
     def get_id_zlecenia(self, instance):
         zlecenia = Zlecenie.objects.filter(
@@ -191,3 +186,17 @@ class GrupaPomiarowDetalSerializer(serializers.ModelSerializer):
         if len(zlecenia) == 0:
             return None
         return zlecenia[0].docelowa_trasa.nazwa
+
+    def get_szerokosc_geo(self, instance):
+        lower_timestamp = instance.timestamp - timedelta(milliseconds=100)
+        higher_timestamp = instance.timestamp + timedelta(milliseconds=100)
+        polozenia = instance.pojazd.polozenia.filter(
+            timestamp__lte=higher_timestamp, timestamp__gte=lower_timestamp)
+        return polozenia[0].szerokosc_geo
+
+    def get_dlugosc_geo(self, instance):
+        lower_timestamp = instance.timestamp - timedelta(milliseconds=100)
+        higher_timestamp = instance.timestamp + timedelta(milliseconds=100)
+        polozenia = instance.pojazd.polozenia.filter(
+            timestamp__lte=higher_timestamp, timestamp__gte=lower_timestamp)
+        return polozenia[0].dlugosc_geo
