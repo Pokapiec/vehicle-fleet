@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ZlecenieListView, ZlecenieDetalView
+from .views import ZlecenieListView, ZlecenieDetalView, PomiaryView, PrzekroczeniaView
 from .views import BlackListTokenView, MyTokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView
 
@@ -11,4 +11,6 @@ urlpatterns = [
 
     path('zlecenia/<int:pk>/', ZlecenieDetalView.as_view(), name='zlecenie_detal'),
     path('zlecenia/', ZlecenieListView.as_view(), name='zlecenia_lista'),
+    path('pomiary/', PomiaryView.as_view(), name='pomiary'),
+    path('przekroczenia/', PrzekroczeniaView.as_view(), name='przekroczenia'),
 ]
