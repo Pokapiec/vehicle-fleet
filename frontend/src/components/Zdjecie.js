@@ -1,46 +1,82 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/Zdjecie.scss'
 import Filterimages from './FilterImages';
+import axiosInstance from '../axios.js';
+
 
 const Zdjecie = () => {
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
+    const [path, setPath] = useState('');
+
+    const filterProps = {
+        setDateFrom: setDateFrom,
+        setDateTo: setDateTo,
+        setPath: setPath,
+    }
+
+    const [przekroczs, setPrzekroczs] = useState([]);
+    const [filtered, setFiltered] = useState([]);
+
+    useEffect(() => {
+        let condition = []
+        if(dateFrom) condition.push('Date.parse(elem.timestamp) > Date.parse(dateFrom)')
+        if(dateTo) condition.push('Date.parse(elem.timestamp) < Date.parse(dateTo)')
+        if(path) condition.push('elem.trasa == path')
+
+        if (condition.length > 0){
+            let filtersApplied = przekroczs.filter(elem => {
+                return eval(condition.join(' & '))
+            }) 
+            setFiltered(filtersApplied)
+        } else {
+            setFiltered(przekroczs)
+        }
+    }, [dateFrom, dateTo, path]);
+
+    const flattenData = (data) => {
+        let arr = []
+        data.forEach(elem => {
+            elem.czujniki.forEach(inner => {
+                // delete elem.czujniki
+                arr.push({ ...elem, ...inner })
+            })
+        })
+        return arr
+    }
+    useEffect(async () => {
+        const data = await axiosInstance.get('przekroczenia/')
+        setPrzekroczs(flattenData(data.data))
+        setFiltered(flattenData(data.data))
+    }, [])
+    
+
     return (
         <>
-            <Filterimages />
+            <Filterimages {...filterProps}/>
             <main className='images-container'>
-                <div className='przekroczenie'>
+                {filtered.map(item => (
+                    <div className='przekroczenie' key={item.id}>
                     <div className='img-section'>
-                        <img className='top-content' src="https://www.komputronik.pl/informacje/wp-content/uploads/2018/05/dron-do-700.jpg" alt=":(" height={150} />
+                        <img className='top-content' src={`${item.zdjecie}`} alt=":(" height={150} />
                         <button>Pobierz zdjęcie</button>
                     </div>
                     <div className='img-section'>
                         <div className='top-content'>
-                            <p><strong>Trasa:</strong> Puszcza Kampinoska</p>
-                            <p><strong>Data planowa:</strong> 2021-10-12</p>
-                            <p><strong>Data realizacji:</strong> -</p>
-                            <p><strong>Status:</strong> Zaplanowane</p>
-                            <p><strong>Pojazd:</strong> Dron</p>
+                            <p><strong>Trasa: </strong>{item.trasa}</p>
+                            <p><strong>Data planowa: </strong>{item.timestamp.slice(0,16).replace('T', ' ')}</p>
+                            <p><strong>Długość geo: </strong>{item.dlugosc_geo}</p>
+                            <p><strong>Szerokość geo: </strong>{item.szerokosc_geo}</p>
+                            <p><strong>Wielkość mierzona: </strong>{item.mierzona_wielkosc}</p>
+                            <p><strong>Wartość: </strong>{item.wartosc}</p>
+                            <p><strong>Przekroczenie: </strong>{item.czy_norma_przekroczona?"Tak":"Nie"}</p>
 
                         </div>
-                        <button>Pobierz zdjęcie</button>
+                        <button>Pobierz dane</button>
                     </div>
                 </div>
-                <div className='przekroczenie'>
-                    <div className='img-section'>
-                        <img className='top-content' src="https://www.komputronik.pl/informacje/wp-content/uploads/2018/05/dron-do-700.jpg" alt=":(" height={150} />
-                        <button>Pobierz zdjęcie</button>
-                    </div>
-                    <div className='img-section'>
-                        <div className='top-content'>
-                            <p><strong>Trasa:</strong> Puszcza Kampinoska</p>
-                            <p><strong>Data planowa:</strong> 2021-10-12</p>
-                            <p><strong>Data realizacji:</strong> -</p>
-                            <p><strong>Status:</strong> Zaplanowane</p>
-                            <p><strong>Pojazd:</strong> Dron</p>
+                ))}
 
-                        </div>
-                        <button>Pobierz zdjęcie</button>
-                    </div>
-                </div>
             </main>
         </>
     );

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Authenticated } from '../Context';
 import '../styles/Navbar.scss';
 import { Link } from "react-router-dom";
@@ -9,7 +9,13 @@ const Navbar = () => {
     const logout = () => {
         setloggedIn(false)
         localStorage.setItem('loggedIn', false)
+        localStorage.setItem('czy_naukowiec', 'false')
     }
+    useEffect(() => {
+        console.log('Czy naukowiec')
+        console.log(localStorage.getItem('czy_naukowiec'))
+        console.log('Czy naukowiec')
+    }, [loggedIn])
     return (
         <nav className='navbar'>
             <div className='nav-logo'><Link to='/'>Panel klienta</Link></div>
@@ -19,15 +25,20 @@ const Navbar = () => {
             <Link to='/'>
                 <div className='nav-btn'>Historia zleceń</div>
             </Link>
-            <Link to='/pomiary'>
-                <div className='nav-btn'>Pomiary</div>
-            </Link>
-            <Link to='/'>
-                {loggedIn ?
-                    <div className='nav-btn' onClick={logout}>Wyloguj</div> :
+            {localStorage.getItem('czy_naukowiec') == 'true'
+                &&
+                <Link to='/pomiary'>
+                    <div className='nav-btn'>Pomiary</div>
+                </Link>
+            }
+            {loggedIn ?
+                <Link to='/' onClick={logout}>
+                    <div className='nav-btn'>Wyloguj</div>
+                </Link> :
+                <Link to='/'>
                     <div className='nav-btn'>Zaloguj</div>
-                }
-            </Link>
+                </Link>
+            }
         </nav>
     );
 }

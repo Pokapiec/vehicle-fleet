@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Authenticated } from '../Context';
 import axiosInstance from '../axios.js';
 import { useHistory } from 'react-router-dom';
-
+import jwt_decode from "jwt-decode";
 
 const Login = () => {
     const history = useHistory();
@@ -27,7 +27,7 @@ const Login = () => {
 
             setloggedIn(true)
             localStorage.setItem('loggedIn', true);
-            console.log(data)
+            localStorage.setItem('czy_naukowiec', jwt_decode(localStorage.getItem('access_token')).czy_naukowiec)
             history.push('/')
         } catch (error) {
             setwarning(true)

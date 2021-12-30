@@ -18,6 +18,10 @@
             filter: brightness(120%);
             // background-color: $base-color3-hover;
             cursor: pointer;
+            transform: translateY(-2px);
+        }
+        &:active {
+            filter: brightness(80%);
         }
     }
     

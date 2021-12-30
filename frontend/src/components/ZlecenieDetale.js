@@ -6,7 +6,8 @@ import axiosInstance from '../axios.js';
 
 const Zleceniedetale = () => {
     const [details, setdetails] = useState({});
-    const [tabData, setTabData] = useState({});
+    const [tabData, setTabData] = useState([]);
+    const [przekroczenia, setPrzekroczenia] = useState([]);
 
     const loc = useLocation()
 
@@ -24,9 +25,11 @@ const Zleceniedetale = () => {
     useEffect(async () => {
         const data = await axiosInstance.get(`zlecenia/${loc.state}/`)
         setdetails(data.data)
-        console.log(data.data)
-        const tab =  flattenData(data.data.pomiary)
+        // console.log(data.data)
+        const tab = flattenData(data.data.pomiary)
         setTabData(tab)
+        setPrzekroczenia(flattenData(data.data.przekroczenia))
+        console.log(data.data)
     }, [])
     return (
         <div className='zlecenie-detale'>
@@ -46,87 +49,50 @@ const Zleceniedetale = () => {
                     <thead>
                         <tr>
                             <th>Nr zlecenia</th>
-                            <th>Trasa</th>
                             <th>timestamp</th>
-                            <th>Połozenie x</th>
-                            <th>Połozenie y</th>
-                            <th>CO</th>
-                            <th>pH</th>
-                            <th>Pb</th>
+                            <th>Szerokość geo</th>
+                            <th>Długość geo</th>
+                            <th>Wielkość</th>
+                            <th>Wartość</th>
+                            <th>Przekroczenie</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>0</td>
-                            <td>Słupsk</td>
-                            <td>2021-11-12</td>
-                            <td>40</td>
-                            <td>75</td>
-                            <td>22</td>
-                            <td>34</td>
-                            <td>38</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Żwirki</td>
-                            <td>2021-11-13</td>
-                            <td>34</td>
-                            <td>27</td>
-                            <td>54</td>
-                            <td>44</td>
-                            <td>51</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Muchomorki</td>
-                            <td>2021-11-14</td>
-                            <td>57</td>
-                            <td>97</td>
-                            <td>11</td>
-                            <td>5</td>
-                            <td>82</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Kościelisko</td>
-                            <td>2021-11-15</td>
-                            <td>95</td>
-                            <td>1</td>
-                            <td>51</td>
-                            <td>74</td>
-                            <td>57</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>San fransisko</td>
-                            <td>2021-11-16</td>
-                            <td>85</td>
-                            <td>72</td>
-                            <td>42</td>
-                            <td>55</td>
-                            <td>60</td>
-                        </tr>
+                        {tabData.map(item => (
+                            <tr key={item.id}>
+                                <td>{item.id}</td>
+                                <td>{item.timestamp?item.timestamp.slice(0, 16).replace('T', ' '):"Niezdefiniowany"}</td>
+                                <td>{item.szerokosc_geo}</td>
+                                <td>{item.dlugosc_geo}</td>
+                                <td>{item.mierzona_wielkosc}</td>
+                                <td>{item.wartosc}</td>
+                                <td>{item.czy_norma_przekroczona ? "Tak" : "Nie"}</td>
+                            </tr>
+                        ))}
+
                     </tbody>
                 </table>
             </div>
             <div className='img-info'>
                 <h2 className='pom-title'>Zdjęcia przekroczeń</h2>
-                <div className='img-info-container'>
-                    <img src="https://www.komputronik.pl/informacje/wp-content/uploads/2018/05/dron-do-700.jpg" alt=":(" height={150} />
-                    <div>
-                        <p><strong>Trasa:</strong> Puszcza Kampinoska</p>
-                        <p><strong>Data planowa:</strong> 2021-10-12</p>
-                        <p><strong>Data realizacji:</strong> -</p>
-                        <p><strong>Status:</strong> Zaplanowane</p>
-                        <p><strong>Pojazd:</strong> Dron</p>
-
+                {przekroczenia.map(item => (
+                    <div className='img-info-container' key={item.id}>
+                        <img src={`${item.zdjecie}`} alt=":(" width={250} />
+                        <div>
+                            <p><strong>Trasa: </strong>{item.trasa}</p>
+                            <p><strong>Data: </strong> {item.timestamp?item.timestamp.slice(0, 16).replace('T', ' '):"Niezdefiniowany"}</p>
+                            <p><strong>Szerokość geo: </strong>{item.szerokosc_geo}</p>
+                            <p><strong>Dlugość: </strong>{item.dlugosc_geo}</p>
+                            <p><strong>Wielkość mierzona: </strong>{item.mierzona_wielkosc}</p>
+                            <p><strong>Wartość: </strong>{item.wartosc}</p>
+                            <p><strong>Przekroczenie: </strong>{item.czy_norma_przekroczona?"Tak":"Nie"}</p>
+                        </div>
                     </div>
-                </div>
-
+                ))}
             </div>
             <div className='vid-info'>
                 <h2>Nagranie z przelotu</h2>
-                <iframe width="560" controls="2" height="315" title="Drone video" src={"https://www.youtube.com/embed/EaYYbW-P1mI?autoplay=0&showinfo=0&autohide=1"} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                <iframe width="560" controls="2" height="315" title="Drone video" src={`${details.nagranie?details.nagranie.replace('watch?v=', 'embed/'):'none'}?autoplay=0&showinfo=0&autohide=1`} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
             </div>
         </div>
     );
