@@ -61,7 +61,7 @@ const Zlecenia = () => {
             let filtersApplied = zlecenia.filter(elem => {
                 return eval(condition.join(' & '))
             }) 
-            console.log(filtersApplied.length)
+            // console.log(filtersApplied.length)
             setFiltered(filtersApplied)
         } else setFiltered(zlecenia)
         
@@ -70,7 +70,7 @@ const Zlecenia = () => {
     
     
     useEffect(async () => {
-        console.log(localStorage.getItem('loggedIn'))
+        // console.log(localStorage.getItem('loggedIn'))
         try {
             const data = await axiosInstance.get('zlecenia/')
             if (zlecenia.length != data.data.length ) {

@@ -1,6 +1,7 @@
 @import '../App.scss';
 
 table {
+    font-size: small;
     margin: 0 auto;
     border: 1px solid $base-color1;
     text-align: center;
@@ -60,4 +61,8 @@ tbody {
             font-size: x-small;
         }
     }
+}
+
+.selected-row {
+    background-color: #ffe9e9;
 }

@@ -21,15 +21,26 @@ const Zleceniedetale = () => {
         })
         return arr
     }
+    const flattenPrzek = (data) => {
+        let arr = []
+        data.forEach(elem => {
+            let pom = { ...elem }
+            elem.czujniki.forEach(inner => {
+                pom[inner.mierzona_wielkosc] = inner.wartosc
+                pom[inner.mierzona_wielkosc] = inner.wartosc
+            })
+            arr.push(pom)
+        })
+        return arr
+    }
 
     useEffect(async () => {
         const data = await axiosInstance.get(`zlecenia/${loc.state}/`)
         setdetails(data.data)
-        // console.log(data.data)
+        console.log(flattenPrzek(data.data.przekroczenia))
         const tab = flattenData(data.data.pomiary)
         setTabData(tab)
-        setPrzekroczenia(flattenData(data.data.przekroczenia))
-        console.log(data.data)
+        setPrzekroczenia(flattenPrzek(data.data.przekroczenia))
     }, [])
     return (
         <div className='zlecenie-detale'>
@@ -83,8 +94,8 @@ const Zleceniedetale = () => {
                             <p><strong>Data: </strong> {item.timestamp?item.timestamp.slice(0, 16).replace('T', ' '):"Niezdefiniowany"}</p>
                             <p><strong>Szerokość geo: </strong>{item.szerokosc_geo}</p>
                             <p><strong>Dlugość: </strong>{item.dlugosc_geo}</p>
-                            <p><strong>Wielkość mierzona: </strong>{item.mierzona_wielkosc}</p>
-                            <p><strong>Wartość: </strong>{item.wartosc}</p>
+                            <p><strong>CO: </strong>{item.CO}</p>
+                            <p><strong>PM10: </strong>{item.PM10}</p>
                             <p><strong>Przekroczenie: </strong>{item.czy_norma_przekroczona?"Tak":"Nie"}</p>
                         </div>
                     </div>
