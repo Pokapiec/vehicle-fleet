@@ -11,11 +11,10 @@ const Navbar = () => {
         localStorage.setItem('loggedIn', false)
         localStorage.setItem('czy_naukowiec', 'false')
     }
-    useEffect(() => {
-        console.log('Czy naukowiec')
-        console.log(localStorage.getItem('czy_naukowiec'))
-        console.log('Czy naukowiec')
-    }, [loggedIn])
+    // useEffect(() => {
+    //     console.log('Czy naukowiec')
+    //     console.log(localStorage.getItem('czy_naukowiec'))
+    // }, [loggedIn])
     return (
         <nav className='navbar'>
             <div className='nav-logo'><Link to='/'>Panel klienta</Link></div>

@@ -18,7 +18,7 @@ const Login = () => {
                 email: data.login,
                 password: data.password,
             })
-            console.log(res)
+            // console.log(res)
             localStorage.setItem('access_token', res.data.access);
             localStorage.setItem('refresh_token', res.data.refresh);
             localStorage.setItem('is_refreshing', false);

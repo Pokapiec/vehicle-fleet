@@ -1,11 +1,15 @@
 import './App.scss'
-import { MemoryRouter as Router } from 'react-router-dom';
-import React, { useState } from 'react';
+import { MemoryRouter as Router, useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { Authenticated } from './Context';
 import Routes from './Routes';
 
 function App() {
   // const location = useLocation()
+  const history = useHistory();
+  useEffect(() => {
+    console.log(history)
+  }, [])
   const [loggedIn, setloggedIn] = useState(localStorage.getItem('loggedIn') === 'true' ? localStorage.getItem('loggedIn') : false);
 
   return (
