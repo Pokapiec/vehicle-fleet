@@ -1,7 +1,8 @@
 @import '../App.scss';
 
 .filter-measure {
-    margin: 40px auto;
+    animation: appear 500ms forwards;
+    margin: 40px auto 20px auto;
     width: 90%;
     height: auto;
     border: 1px solid $light-text;
@@ -63,6 +64,9 @@
                 margin: 2px auto;
             }
         }
+    }
+    #wielkosc {
+        width: 8.99rem;
     }
 }
 

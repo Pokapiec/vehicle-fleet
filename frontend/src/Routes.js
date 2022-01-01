@@ -1,5 +1,5 @@
 import React from 'react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Zlecenia from './components/Zlecenia';
@@ -11,26 +11,28 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Authenticated } from './Context';
 
 
+
 const Routes = () => {
+    const [zlecenia, setZlecenia] = useState([]);
     const location = useLocation()
     const { loggedIn } = useContext(Authenticated)
     return (
         <div>
             <Navbar />
-            <TransitionGroup>
+            {/* <TransitionGroup>
                 <CSSTransition
-                    timeout={500}
+                    timeout={0}
                     classNames='fade'
-                    key={location.key}>
+                    key={location.key}> */}
                     <Switch>
                         <Route path='/login'>
                             {loggedIn ?
-                                <Zlecenia /> :
+                                <Zlecenia zlecenia={zlecenia} setZlecenia={setZlecenia}/> :
                                 <Login />}
                         </Route>
                         <Route path='/' exact>
                             {loggedIn ?
-                                <Zlecenia /> :
+                                <Zlecenia zlecenia={zlecenia} setZlecenia={setZlecenia}/> :
                                 <Redirect to="/login" />}
                         </Route>
                         <Route path='/pomiary'>
@@ -50,8 +52,8 @@ const Routes = () => {
                         </Route>
 
                     </Switch>
-                </CSSTransition>
-            </TransitionGroup>
+                {/* </CSSTransition>
+            </TransitionGroup> */}
         </div >
     );
 }

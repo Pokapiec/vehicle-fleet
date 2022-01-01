@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/PomiaryFiltry.scss'
 
-const Pomiaryfiltry = ({ setDateFrom, setDateTo, setPath, setIssueNumber, setLow, setHigh }) => {
+const Pomiaryfiltry = ({ setDateFrom, setDateTo, setPath, setIssueNumber, setLow, setHigh, setMeasure, setIfVal }) => {
 
     return (
         <section className='filter-measure'>
@@ -35,10 +35,21 @@ const Pomiaryfiltry = ({ setDateFrom, setDateTo, setPath, setIssueNumber, setLow
                         <option>4</option>
                     </datalist>
                 </div>
+                <div>
+                    <input id='przek' type="text" list="prz" placeholder='Czy przekroczenie' onChange={e => { setIfVal(e.currentTarget.value) }} />
+                    <datalist id="prz">
+                        <option>Tak</option>
+                        <option>Nie</option>
+                    </datalist>
+                </div>
             </div>
             <div className='amounts'>
                 <div id='pom-labels'>
-                    <p>Wartość mierzona:</p>
+                <input id='wielkosc' type="text" list="measure" placeholder='Wielkość mierzona' onChange={e => { setMeasure(e.currentTarget.value) }}/>
+                    <datalist id="measure">
+                        <option>PM10</option>
+                        <option>CO</option>
+                    </datalist>
 
                 </div>
                 <div id='pom-gt'>

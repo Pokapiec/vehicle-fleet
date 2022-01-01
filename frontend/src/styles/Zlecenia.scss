@@ -1,6 +1,8 @@
 @import '../App.scss';
+
 .zlecenia {
     li {
+        animation: scaleup 500ms forwards;
         width: 90%;
         height: 50px;
         background-color: $base-color3;

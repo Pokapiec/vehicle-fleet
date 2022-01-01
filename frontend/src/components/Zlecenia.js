@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import Filters from './ZleceniaFiltry';
 import axiosInstance from '../axios.js';
 import { Authenticated } from '../Context';
+import useFetch from '../utils/useFetch';
 
 
-const Zlecenia = () => {
+const Zlecenia = ({zlecenia, setZlecenia}) => {
     const [dateFromP, setDateFromP] = useState('');
     const [dateFromR, setDateFromR] = useState('');
     const [dateToP, setDateToP] = useState('');
@@ -19,7 +20,7 @@ const Zlecenia = () => {
 
     const [filtered, setFiltered] = useState([]);
     const { setloggedIn } = useContext(Authenticated)
-    const [zlecenia, setZlecenia] = useState([]);
+    // const [zlecenia, setZlecenia] = useState([]);
 
     const filterProps = {
         setDateFromP: setDateFromP,
@@ -36,19 +37,19 @@ const Zlecenia = () => {
     useEffect(() => {
         // console.log(dateFromP, dateFromR, path, dateToP, dateToR, status)
         let condition = []
-        if(dateFromP) condition.push('Date.parse(elem.planowana_data_realizacji) > Date.parse(dateFromP)')
-        if(dateToP) condition.push('Date.parse(elem.planowana_data_realizacji) < Date.parse(dateToP)')
-        if(dateFromR) condition.push('Date.parse(elem.koniec_realizacji) > Date.parse(dateFromR)')
-        if(dateToR) condition.push('Date.parse(elem.koniec_realizacji) < Date.parse(dateToR)')
-        if(path) condition.push('elem.trasa == path')
+        if (dateFromP) condition.push('Date.parse(elem.planowana_data_realizacji) > Date.parse(dateFromP)')
+        if (dateToP) condition.push('Date.parse(elem.planowana_data_realizacji) < Date.parse(dateToP)')
+        if (dateFromR) condition.push('Date.parse(elem.koniec_realizacji) > Date.parse(dateFromR)')
+        if (dateToR) condition.push('Date.parse(elem.koniec_realizacji) < Date.parse(dateToR)')
+        if (path) condition.push('elem.trasa == path')
 
-        if(zapl & !ukonczone) {
-            condition.push('elem.planowana_data_realizacji')
+        if (zapl & !ukonczone) {
+            condition.push('!elem.koniec_realizacji')
         } else if (!zapl & ukonczone) {
             condition.push('elem.koniec_realizacji')
         }
 
-        if(dron & !lodka) {
+        if (dron & !lodka) {
             condition.push('elem.typ_pojazdu == "D"')
         } else if (!dron & lodka) {
             condition.push('elem.typ_pojazdu == "L"')
@@ -60,33 +61,35 @@ const Zlecenia = () => {
         if (condition.length > 0) {
             let filtersApplied = zlecenia.filter(elem => {
                 return eval(condition.join(' & '))
-            }) 
+            })
             // console.log(filtersApplied.length)
             setFiltered(filtersApplied)
         } else setFiltered(zlecenia)
-        
+
     }, [dateFromP, dateFromR, path, dateToP, dateToR, zapl, ukonczone, dron, lodka]);
-    
-    
-    
-    useEffect(async () => {
-        // console.log(localStorage.getItem('loggedIn'))
-        try {
-            const data = await axiosInstance.get('zlecenia/')
-            if (zlecenia.length != data.data.length ) {
-                console.log(data.data)
-                setZlecenia(data.data)
-                setFiltered(data.data)
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await axiosInstance.get('zlecenia/')
+                if (zlecenia.length != data.data.length) {
+                    console.log(zlecenia.length, data.data.length)
+                    console.log("Fetching !")
+                    setZlecenia(data.data)
+                    setFiltered(data.data)
+                }
+            } catch (error) {
+                setloggedIn(false)
+                localStorage.setItem('loggedIn', false);
             }
-        } catch (error) {
-            setloggedIn(false)
-            localStorage.setItem('loggedIn', false);
         }
+        fetchData()
+        return () => setFiltered([])
     }, [])
 
     return (
         <>
-            <Filters {...filterProps}/>
+            <Filters {...filterProps} />
             <main className='zlecenia'>
                 <ul>
                     {filtered.map(item => (

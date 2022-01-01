@@ -1,6 +1,8 @@
 @import '../App.scss';
 
+
 .filter-zl {
+    animation: appear 500ms forwards;
     margin: 40px auto;
     width: 90%;
     height: auto;
