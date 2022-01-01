@@ -13,6 +13,8 @@ const Pomiarytab = () => {
     const [issueNumber, setIssueNumber] = useState('');
     const [low, setLow] = useState(0);
     const [high, setHigh] = useState(0);
+    const [measure, setMeasure] = useState('');
+    const [val, setIfVal] = useState('');
 
     const filterProps = {
         setDateFrom: setDateFrom,
@@ -20,7 +22,9 @@ const Pomiarytab = () => {
         setPath: setPath,
         setIssueNumber: setIssueNumber,
         setLow: setLow,
-        setHigh: setHigh
+        setHigh: setHigh,
+        setMeasure: setMeasure,
+        setIfVal: setIfVal
     }
 
     const [pomiary, setPomiary] = useState([]);
@@ -29,41 +33,36 @@ const Pomiarytab = () => {
     const [ids, setIds] = useState([]);
     const [temp, setTemp] = useState(0);
 
-    const flattenData = (data) => {
-        let arr = []
-        data.forEach(elem => {
-            elem.czujniki.forEach(inner => {
-                // delete elem.czujniki
-                arr.push({ ...elem, ...inner })
-            })
-        })
-        return arr
-    }
 
-    useEffect(() => {
-        let condition = []
-        if (low) condition.push('elem.wartosc > low')
-        if (high) condition.push('elem.wartosc < high')
-        if (dateFrom) condition.push('Date.parse(elem.timestamp) > Date.parse(dateFrom)')
-        if (dateTo) condition.push('Date.parse(elem.timestamp) < Date.parse(dateTo)')
-        if (issueNumber) condition.push('elem.id == issueNumber')
-        if (path) condition.push('elem.trasa == path')
+    // useEffect(() => {
+    //     let condition = []
+    //     if (low) condition.push('elem.wartosc > low')
+    //     if (high) condition.push('elem.wartosc < high')
+    //     if (dateFrom) condition.push('Date.parse(elem.timestamp) > Date.parse(dateFrom)')
+    //     if (dateTo) condition.push('Date.parse(elem.timestamp) < Date.parse(dateTo)')
+    //     if (issueNumber) condition.push('elem.id == issueNumber')
+    //     if (path) condition.push('elem.trasa == path')
 
-        if (condition.length) {
-            let filtersApplied = pomiary.filter(elem => {
-                return eval(condition.join(' & '))
-            })
-            setFiltered(filtersApplied)
-        } else {
-            setFiltered(pomiary)
-        }
-    }, [dateFrom, dateTo, path, issueNumber, low, high]);
+    //     if (condition.length) {
+    //         let filtersApplied = pomiary.filter(elem => {
+    //             return eval(condition.join(' & '))
+    //         })
+    //         setFiltered(filtersApplied)
+    //     } else {
+    //         setFiltered(pomiary)
+    //     }
+    // }, [dateFrom, dateTo, path, issueNumber, low, high]);
 
     useEffect(async () => {
-        const data = await axiosInstance.get('pomiary/')
-        setPomiary(flattenData(data.data))
-        setFiltered(flattenData(data.data))
-        setToDownload(flattenData(data.data))
+        const fetchAndSet = async () => {
+            const data = await axiosInstance.get('pomiary/')
+            const tabData = data.data
+            tabData.sort((a, b) => (a.id > b.id) ? 1 : -1)
+            setPomiary(tabData)
+            setFiltered(tabData)
+            setToDownload(tabData)
+        }
+        fetchAndSet()
     }, [])
 
     const downloadJson = async () => {
@@ -120,9 +119,43 @@ const Pomiarytab = () => {
         }
     }, [temp])
 
+    const filterByClick = async () => {
+        let condition = []
+        const mapper = {
+            'Tak': 'true',
+            'Nie': 'false'
+        }
+        if (measure) condition.push(`mierzona_wielkosc=${measure}`)
+        if (low) condition.push(`wartosc_from=${low}`)
+        if (high) condition.push(`wartosc_to=${high}`)
+        if (val) condition.push(`przekroczenie=${mapper[val]}`)
+        if (dateFrom) condition.push(`timestamp_from=${dateFrom + ' 00:00'}`)
+        if (dateTo) condition.push(`timestamp_to=${dateTo + ' 00:00'}`)
+        if (issueNumber) condition.push(`zlecenie=${issueNumber}`)
+        if (path) condition.push(`trasa=${path}`)
+
+        // if (condition.length) {
+        condition = condition.join('&')
+        const data = await axiosInstance.get('pomiary?' + condition)
+        const tabData = data.data
+        tabData.sort((a, b) => (a.id > b.id) ? 1 : -1)
+        setFiltered(tabData)
+        // } else {
+        //     setFiltered(pomiary)
+        // }
+    }
+
+    const resetFilters = () => {
+        setFiltered(pomiary)
+    }
+
     return (
         <main className='pomiary'>
             <Pomiaryfiltry {...filterProps} />
+            <div className='btn-container'>
+                <button className='filter-btn' onClick={resetFilters}>Reset filtrów</button>
+                <button className='filter-btn' onClick={filterByClick}>Filtruj</button>
+            </div>
             <div>
                 <table>
                     <thead>

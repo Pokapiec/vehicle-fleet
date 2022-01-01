@@ -17,6 +17,7 @@
 }
 
 .auth-form {
+    animation: appear 500ms forwards;
     border: 1px solid $light-border;
     border-radius: 10px;
     width: clamp(300px, 80% ,600px);

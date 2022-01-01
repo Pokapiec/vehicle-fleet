@@ -1,6 +1,7 @@
 @import '../App.scss';
 
 .filter-images {
+    animation: appear 500ms forwards;
     margin: 40px auto;
     width: 90%;
     height: auto;

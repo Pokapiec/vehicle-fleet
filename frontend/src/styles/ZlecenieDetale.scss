@@ -14,10 +14,12 @@
         margin: 30px;
     }
     .pom-title {
+        
         text-align: left;
         margin: 30px 40px;
     }
     .zl-info {
+        animation: appear 500ms forwards;
         @include bordered();
         padding: 20px 30px;
         height: auto;
@@ -27,6 +29,8 @@
     }
     .pom-info {
         @include bordered();
+        animation: appear 500ms forwards 100ms;
+        opacity: 0;
         height: 300px;
         overflow: auto;
         .pomiary-tab {
@@ -35,6 +39,7 @@
         
     }
     .img-info-container {
+        
         margin-top: 2em;
         margin-bottom: 2em;
         padding-bottom: 2em;
@@ -47,11 +52,15 @@
         }
     }
     .img-info {
+        animation: appear 500ms forwards 200ms;
+        opacity: 0;
         @include bordered();
         height: 300px;
         overflow: auto;
     }
     .vid-info {
+        animation: appear 500ms forwards 300ms;
+        opacity: 0;
         margin: 10px auto;
         width: 90%;
         height: auto;

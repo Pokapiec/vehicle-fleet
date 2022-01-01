@@ -57,7 +57,7 @@ body {
 .fade-enter.fade-enter-active {
   opacity: 1;
   transform: translate(0, 0);
-  transition: all 500ms;
+  // transition: all 500ms;
 }
 
 .fade-exit {
@@ -66,4 +66,24 @@ body {
 .fade-exit-active {
   opacity: 0;
   // transition: opacity 0ms;
+}
+
+@keyframes appear {
+  from {
+      opacity: 0;
+      transform: translate(10rem, 0);
+  }
+  to {
+      opacity: 1;
+      transform: translate(0, 0);
+  }
+}
+
+@keyframes scaleup {
+  from {
+      transform: scale(0);
+  }
+  to {
+      transform: scale(1);
+  }
 }

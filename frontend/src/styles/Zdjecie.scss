@@ -4,7 +4,7 @@
     img {
         // transition: 0.3s;
         transform: scale(0);
-        animation: comein 600ms forwards;
+        animation: scaleup 350ms forwards;
     }
     margin: 10px auto;
     width: 90%;
@@ -38,6 +38,7 @@
                     // background-color: $base-color3-hover;
                     filter: brightness(120%);
                     cursor: pointer;
+                    transform: scale(1.02);
                 }
                 &:active {
                     filter: brightness(80%);

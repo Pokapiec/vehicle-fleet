@@ -39,6 +39,7 @@ const Zleceniedetale = () => {
         setdetails(data.data)
         console.log(flattenPrzek(data.data.przekroczenia))
         const tab = flattenData(data.data.pomiary)
+        tab.sort((a, b) => (a.id > b.id) ? 1 : -1)
         setTabData(tab)
         setPrzekroczenia(flattenPrzek(data.data.przekroczenia))
     }, [])
