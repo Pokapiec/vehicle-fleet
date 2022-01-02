@@ -6,20 +6,18 @@ import Routes from './Routes';
 
 function App() {
   // const location = useLocation()
-  const history = useHistory();
-  useEffect(() => {
-    console.log(history)
-  }, [])
+  
   const [loggedIn, setloggedIn] = useState(localStorage.getItem('loggedIn') === 'true' ? localStorage.getItem('loggedIn') : false);
 
   return (
     <div className="App">
-      <Authenticated.Provider value={{ loggedIn, setloggedIn }}>
-        <Router>
-          <Routes/>
-        </Router>
-      </Authenticated.Provider>
-
+      
+          <Authenticated.Provider value={{ loggedIn, setloggedIn }}>
+            <Router>
+              <Routes />
+            </Router>
+          </Authenticated.Provider>
+        
     </div>
   );
 }

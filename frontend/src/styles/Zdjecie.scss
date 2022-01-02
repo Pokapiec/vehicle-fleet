@@ -23,6 +23,8 @@
             justify-content: flex-end;
             .top-content {
                 margin-bottom: auto;
+                overflow: auto;
+                max-height: 200px;
             }
             button {
                 width: auto;
