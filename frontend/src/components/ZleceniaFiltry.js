@@ -2,6 +2,17 @@ import React from 'react';
 import '../styles/ZleceniaFiltry.scss';
 
 const Filters = ({ setDateFromP, setDateFromR, setDateToP, setDateToR, setPath, setZapl, setUkonczone, setDron, setLodka }) => {
+
+    // const changeAndSet = (e, setFunc) => {
+    //     // setFunc(e.currentTarget.checked)
+        
+    //     // if (e.currentTarget.checked)
+    //     //     e.currentTarget.checked = 0
+    //     // else 
+    //     //     e.currentTarget.checked = 1
+    //     console.log(e.currentTarget.defaultChecked)
+    // }
+
     return (
         <section className='filter-zl'>
             <div className='filter-section dates-section'>
@@ -34,11 +45,11 @@ const Filters = ({ setDateFromP, setDateFromR, setDateToP, setDateToR, setPath, 
                         <h5>Status zlecenia</h5>
                         <div>
 
-                            <input type="checkbox" id='zaplan' onChange={e => { setZapl(e.currentTarget.checked) }} />
+                            <input type="checkbox" id='zaplan' onChange={e => { setZapl(e.currentTarget.checked) }} defaultChecked/>
                             <label htmlFor="zaplan">Zaplanowane</label>
                         </div>
                         <div>
-                            <input type="checkbox" id='ukon' onChange={e => { setUkonczone(e.currentTarget.checked) }}/>
+                            <input type="checkbox" id='ukon' onChange={e => { setUkonczone(e.currentTarget.checked) }} defaultChecked/>
                             <label htmlFor="ukon">Ukończone</label>
                         </div>
                     </span>
@@ -46,11 +57,11 @@ const Filters = ({ setDateFromP, setDateFromR, setDateToP, setDateToR, setPath, 
                         <h5>Pojazd</h5>
                         <div>
 
-                            <input type="checkbox" id='dron' onChange={e => { setDron(e.currentTarget.checked) }}/>
+                            <input type="checkbox" id='dron' onChange={e => setDron(e.currentTarget.checked)} defaultChecked/>
                             <label htmlFor="dron">Dron</label>
                         </div>
                         <div>
-                            <input type="checkbox" id='lodka' onChange={e => { setLodka(e.currentTarget.checked) }}/>
+                            <input type="checkbox" id='lodka' onChange={e => { setLodka(e.currentTarget.checked) }} defaultChecked/>
                             <label htmlFor="lodka">Łódka</label>
                         </div>
                     </span>

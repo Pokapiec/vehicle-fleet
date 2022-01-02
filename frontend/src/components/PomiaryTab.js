@@ -56,7 +56,8 @@ const Pomiarytab = () => {
     useEffect(async () => {
         const fetchAndSet = async () => {
             const data = await axiosInstance.get('pomiary/')
-            const tabData = data.data
+            const tabData = data.data.results
+            // console.log(data.data.results)
             tabData.sort((a, b) => (a.id > b.id) ? 1 : -1)
             setPomiary(tabData)
             setFiltered(tabData)
@@ -107,7 +108,7 @@ const Pomiarytab = () => {
     }
 
     useEffect(() => {
-        console.log(ids)
+        // console.log(ids)
         if (ids.length > 0) {
             const newFiltered = filtered.filter(elem => {
                 return ids.includes(parseInt(elem.id))
@@ -137,7 +138,7 @@ const Pomiarytab = () => {
         // if (condition.length) {
         condition = condition.join('&')
         const data = await axiosInstance.get('pomiary?' + condition)
-        const tabData = data.data
+        const tabData = data.data.results
         tabData.sort((a, b) => (a.id > b.id) ? 1 : -1)
         setFiltered(tabData)
         // } else {
@@ -147,6 +148,12 @@ const Pomiarytab = () => {
 
     const resetFilters = () => {
         setFiltered(pomiary)
+        const filters = ['#colt', '#cogt', '#wielkosc', '#przek', '#nr', '#trasa', '#datef', '#datet']
+        filters.forEach(item => {
+            let elem = document.querySelector(item)
+            elem.value = ''
+        })
+
     }
 
     return (
