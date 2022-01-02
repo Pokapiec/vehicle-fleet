@@ -13,10 +13,10 @@ const Zlecenia = ({zlecenia, setZlecenia}) => {
     const [dateToP, setDateToP] = useState('');
     const [dateToR, setDateToR] = useState('');
     const [path, setPath] = useState('');
-    const [zapl, setZapl] = useState(false);
-    const [ukonczone, setUkonczone] = useState(false);
-    const [dron, setDron] = useState(false);
-    const [lodka, setLodka] = useState(false);
+    const [zapl, setZapl] = useState(true);
+    const [ukonczone, setUkonczone] = useState(true);
+    const [dron, setDron] = useState(true);
+    const [lodka, setLodka] = useState(true);
 
     const [filtered, setFiltered] = useState([]);
     const { setloggedIn } = useContext(Authenticated)
