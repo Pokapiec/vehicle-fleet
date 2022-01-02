@@ -4,12 +4,12 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_205_RESET_CONTENT
-from datetime import timedelta, datetime
+from datetime import timedelta
 from django.utils import timezone
 from dateutil import parser
 
-from .models import Zlecenie, Polozenie, Pomiar
-from .serializers import ZlecenieListaSerializer, ZlecenieDetalSerializer, MyTokenObtainPairSerializer, GrupaPrzekroczenSerializer, PomiarDetalSerializer
+from .models import Zlecenie, Polozenie, MierzonaWielkosc, DocelowaTrasa
+from .serializers import ZlecenieListaSerializer, ZlecenieDetalSerializer, MyTokenObtainPairSerializer, GrupaPrzekroczenSerializer, PomiarDetalSerializer, MierzonaWielkoscSerializer, TrasaSerializer
 
 from .permissions import TylkoKlient, TylkoNaukowiec, TylkoZleceniodawca
 
@@ -126,3 +126,19 @@ class PrzekroczeniaView(APIView):
 
 def flatten(t):
     return [item for sublist in t for item in sublist]
+
+
+class FilterInfoView(APIView):
+    permission_classes = [TylkoNaukowiec]
+
+    def get(self, request):
+        mierzone_wielkosci = MierzonaWielkosc.objects.all()
+        mierzone_wielkosci_serializer = MierzonaWielkoscSerializer(
+            mierzone_wielkosci, many=True)
+
+        trasy = DocelowaTrasa.objects.all()
+        trasy_serializer = TrasaSerializer(trasy, many=True)
+        return Response({
+            "mierzone_wartosci": mierzone_wielkosci_serializer.data,
+            "trasy": trasy_serializer.data
+        })

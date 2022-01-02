@@ -2,7 +2,7 @@ from rest_framework import serializers
 from datetime import timedelta
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from .models import Zlecenie, Pojazd, Pomiar, Polozenie
+from .models import Zlecenie, Pomiar, Polozenie, MierzonaWielkosc, DocelowaTrasa
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -200,3 +200,16 @@ class PomiarDetalSerializer(serializers.ModelSerializer):
         polozenia = instance.pojazd.polozenia.filter(
             timestamp__lte=higher_timestamp, timestamp__gte=lower_timestamp)
         return polozenia[0].dlugosc_geo
+
+
+class MierzonaWielkoscSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MierzonaWielkosc
+        fields = ['nazwa']
+
+
+class TrasaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DocelowaTrasa
+        fields = ['nazwa']
+
