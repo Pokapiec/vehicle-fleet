@@ -145,42 +145,44 @@ const Zdjecie = () => {
     //    };
 
     const downloadJpg = (e) => {
-            saveAs(`https://www.dronexvision.pl/sites/default/files/gallery/drone-x-vision-zdjecie-z-powietrza-jeziora-mazurskie-1000x667.jpg`, "pretty image.jpg");
+        saveAs(`https://www.dronexvision.pl/sites/default/files/gallery/drone-x-vision-zdjecie-z-powietrza-jeziora-mazurskie-1000x667.jpg`, "pretty image.jpg");
     }
 
     return (
         <>
             <Filterimages {...filterProps} />
-            <main className='images-container'>
-                {filtered.map((item) => (
-                    <div className='przekroczenie' key={item.id}>
-                        <div className='img-section'>
-                            <img className='top-content' src={`${item.zdjecie}`} alt=":(" height={150} />
-                            {/* <a href={`${item.zdjecie}`} download target="zdj.jpg"> */}
-                            <button onClick={downloadJpg}>Pobierz zdjęcie</button>
-                            {/* </a> */}
-                        </div>
-                        <div className='img-section'>
-                            <div className='top-content'>
-                                <p><strong>Trasa: </strong>{item.trasa}</p>
-                                <p><strong>Data planowa: </strong>{item.timestamp.slice(0, 16).replace('T', ' ')}</p>
-                                <p><strong>Długość geo: </strong>{item.dlugosc_geo}</p>
-                                <p><strong>Szerokość geo: </strong>{item.szerokosc_geo}</p>
-                                {measurements.map((elem, key) => (
-                                    <p key={key}><strong>{elem}: </strong>{item[elem]}</p>
-                                ))}
-
-                                <p><strong>Przekroczenie: </strong>{item.czy_norma_przekroczona ? "Tak" : "Nie"}</p>
+            {filtered.length &&
+                <main className='images-container'>
+                    {filtered.map((item) => (
+                        <div className='przekroczenie' key={item.id}>
+                            <div className='img-section'>
+                                <img className='top-content' src={`${item.zdjecie}`} alt=":(" height={150} />
+                                {/* <a href={`${item.zdjecie}`} download target="zdj.jpg"> */}
+                                <button onClick={downloadJpg}>Pobierz zdjęcie</button>
+                                {/* </a> */}
                             </div>
-                            <CSVLink data={[item]} filename={"przekroczenia.csv"}>
-                                <button>Pobierz dane</button>
-                            </CSVLink>
+                            <div className='img-section'>
+                                <div className='top-content'>
+                                    <p><strong>Trasa: </strong>{item.trasa}</p>
+                                    <p><strong>Data planowa: </strong>{item.timestamp.slice(0, 16).replace('T', ' ')}</p>
+                                    <p><strong>Długość geo: </strong>{item.dlugosc_geo}</p>
+                                    <p><strong>Szerokość geo: </strong>{item.szerokosc_geo}</p>
+                                    {measurements.map((elem, key) => (
+                                        <p key={key}><strong>{elem}: </strong>{item[elem]}</p>
+                                    ))}
 
+                                    <p><strong>Przekroczenie: </strong>{item.czy_norma_przekroczona ? "Tak" : "Nie"}</p>
+                                </div>
+                                <CSVLink data={[item]} filename={"przekroczenia.csv"}>
+                                    <button>Pobierz dane</button>
+                                </CSVLink>
+
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
 
-            </main>
+                </main>
+            }
         </>
     );
 }

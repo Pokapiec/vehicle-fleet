@@ -4,7 +4,8 @@
     img {
         // transition: 0.3s;
         transform: scale(0);
-        animation: scaleup 350ms forwards;
+        animation: scaleup 350ms forwards 200ms;
+        min-width: 200px;
     }
     margin: 10px auto;
     width: 90%;
