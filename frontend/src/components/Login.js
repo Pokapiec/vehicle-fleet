@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import '../styles/Login.scss';
 import { useForm } from 'react-hook-form';
-import { Authenticated } from '../Context';
+import { Authenticated, Paths, Measurements } from '../Context';
 import axiosInstance from '../axios.js';
 import { useHistory } from 'react-router-dom';
 import jwt_decode from "jwt-decode";

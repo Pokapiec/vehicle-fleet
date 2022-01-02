@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import '../styles/ZlecenieDetale.scss'
 import { useLocation } from 'react-router-dom'
 import axiosInstance from '../axios.js';
+import { Measurements } from '../Context';
 
 
 const Zleceniedetale = () => {
+    const { measurements, setMeasurements } = useContext(Measurements);
+
     const [details, setdetails] = useState({});
     const [tabData, setTabData] = useState([]);
     const [przekroczenia, setPrzekroczenia] = useState([]);
@@ -33,15 +36,28 @@ const Zleceniedetale = () => {
         })
         return arr
     }
+    const getTypesFromData = (data) => {
+        const types = []
+        data.forEach(item => {
+            item.czujniki.forEach(elem => {
+                if (!types.includes(elem.mierzona_wielkosc))
+                    types.push(elem.mierzona_wielkosc)
+            })
+        })
+        return types
+    }
 
-    useEffect(async () => {
-        const data = await axiosInstance.get(`zlecenia/${loc.state}/`)
-        setdetails(data.data)
-        console.log(flattenPrzek(data.data.przekroczenia))
-        const tab = flattenData(data.data.pomiary)
-        tab.sort((a, b) => (a.id > b.id) ? 1 : -1)
-        setTabData(tab)
-        setPrzekroczenia(flattenPrzek(data.data.przekroczenia))
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await axiosInstance.get(`zlecenia/${loc.state}/`)
+            setdetails(data.data)
+            const tab = flattenData(data.data.pomiary)
+            tab.sort((a, b) => (a.id > b.id) ? 1 : -1)
+            setTabData(tab)
+            setPrzekroczenia(flattenPrzek(data.data.przekroczenia))
+            setMeasurements(getTypesFromData(data.data.przekroczenia))
+        }
+        fetchData()
     }, [])
     return (
         <div className='zlecenie-detale'>
@@ -95,8 +111,9 @@ const Zleceniedetale = () => {
                             <p><strong>Data: </strong> {item.timestamp?item.timestamp.slice(0, 16).replace('T', ' '):"Niezdefiniowany"}</p>
                             <p><strong>Szerokość geo: </strong>{item.szerokosc_geo}</p>
                             <p><strong>Dlugość: </strong>{item.dlugosc_geo}</p>
-                            <p><strong>CO: </strong>{item.CO}</p>
-                            <p><strong>PM10: </strong>{item.PM10}</p>
+                            {measurements.map((elem, key) => (
+                                <p key={key}><strong>{elem}: </strong>{item[elem]}</p>
+                            ))}
                             <p><strong>Przekroczenie: </strong>{item.czy_norma_przekroczona?"Tak":"Nie"}</p>
                         </div>
                     </div>

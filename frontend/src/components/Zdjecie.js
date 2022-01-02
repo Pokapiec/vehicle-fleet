@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import '../styles/Zdjecie.scss'
 import Filterimages from './FilterImages';
 import axiosInstance from '../axios.js';
 import { CSVLink } from "react-csv";
 import { saveAs } from 'file-saver'
+import { Paths, Measurements } from '../Context';
+
 
 const Zdjecie = () => {
+    const { measurements, setMeasurements } = useContext(Measurements);
+    const { paths, setPaths } = useContext(Paths);
+
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
     const [path, setPath] = useState('');
@@ -14,6 +19,7 @@ const Zdjecie = () => {
         setDateFrom: setDateFrom,
         setDateTo: setDateTo,
         setPath: setPath,
+        paths: paths,
     }
 
     const [przekroczs, setPrzekroczs] = useState([]);
@@ -47,11 +53,31 @@ const Zdjecie = () => {
         })
         return arr
     }
-    useEffect(async () => {
-        const data = await axiosInstance.get('przekroczenia/')
-        console.log(flattenData(data.data))
-        setPrzekroczs(flattenData(data.data))
-        setFiltered(flattenData(data.data))
+
+    const getTypesFromData = (data) => {
+        const types = []
+        data.forEach(item => {
+            item.czujniki.forEach(elem => {
+                if (!types.includes(elem.mierzona_wielkosc))
+                    types.push(elem.mierzona_wielkosc)
+            })
+        })
+        return types
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await axiosInstance.get('przekroczenia/')
+            // const types = await axiosInstance.get('filter-info/')
+            setPrzekroczs(flattenData(data.data))
+            setFiltered(flattenData(data.data))
+            // const reduced = data.data.map(item => item.mierzona_wielkosc)
+            setMeasurements(getTypesFromData(data.data))
+            setPaths([...new Set(data.data.map(item => item.trasa))])
+            // setPaths(types.data.trasy)
+            // setMeasurements(types.data.mierzone_wartosci)
+        }
+        fetchData()
     }, [])
 
     function downloadImage(e) {
@@ -140,8 +166,10 @@ const Zdjecie = () => {
                                 <p><strong>Data planowa: </strong>{item.timestamp.slice(0, 16).replace('T', ' ')}</p>
                                 <p><strong>Długość geo: </strong>{item.dlugosc_geo}</p>
                                 <p><strong>Szerokość geo: </strong>{item.szerokosc_geo}</p>
-                                <p><strong>CO: </strong>{item.CO}</p>
-                                <p><strong>PM10: </strong>{item.PM10}</p>
+                                {measurements.map((elem, key) => (
+                                    <p key={key}><strong>{elem}: </strong>{item[elem]}</p>
+                                ))}
+
                                 <p><strong>Przekroczenie: </strong>{item.czy_norma_przekroczona ? "Tak" : "Nie"}</p>
                             </div>
                             <CSVLink data={[item]} filename={"przekroczenia.csv"}>

@@ -1,7 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import '../styles/PomiaryFiltry.scss'
+import axiosInstance from '../axios';
+import { Paths, Measurements } from '../Context';
 
 const Pomiaryfiltry = ({ setDateFrom, setDateTo, setPath, setIssueNumber, setLow, setHigh, setMeasure, setIfVal }) => {
+    const { measurements, setMeasurements } = useContext(Measurements);
+    const { paths, setPaths } = useContext(Paths);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const types = await axiosInstance.get('filter-info/')
+            // console.log(types)
+            setPaths(types.data.trasy)
+            setMeasurements(types.data.mierzone_wartosci)
+        }
+        fetchData()
+    }, []);
 
     return (
         <section className='filter-measure'>
@@ -20,10 +34,9 @@ const Pomiaryfiltry = ({ setDateFrom, setDateTo, setPath, setIssueNumber, setLow
                 <div>
                     <input id='trasa' type="text" list="paths" placeholder='Trasa' onChange={e => { setPath(e.currentTarget.value) }} />
                     <datalist id="paths">
-                        <option>Puszcza Kampinoska</option>
-                        <option>Wałbrzych</option>
-                        <option>Okocim</option>
-                        <option>Skierliczki</option>
+                        {paths.map((item, id) => (
+                            <option key={id}>{item.nazwa}</option>
+                        ))}
                     </datalist>
                 </div>
                 <div>
@@ -45,10 +58,11 @@ const Pomiaryfiltry = ({ setDateFrom, setDateTo, setPath, setIssueNumber, setLow
             </div>
             <div className='amounts'>
                 <div id='pom-labels'>
-                <input id='wielkosc' type="text" list="measure" placeholder='Wielkość mierzona' onChange={e => { setMeasure(e.currentTarget.value) }}/>
+                    <input id='wielkosc' type="text" list="measure" placeholder='Wielkość mierzona' onChange={e => { setMeasure(e.currentTarget.value) }} />
                     <datalist id="measure">
-                        <option>PM10</option>
-                        <option>CO</option>
+                        {measurements.map((item, id) => (
+                            <option key={id}>{item.nazwa}</option>
+                        ))}
                     </datalist>
 
                 </div>

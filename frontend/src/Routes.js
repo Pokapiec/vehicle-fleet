@@ -1,5 +1,5 @@
 import React from 'react';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Zlecenia from './components/Zlecenia';
@@ -8,18 +8,35 @@ import Zleceniedetale from './components/ZlecenieDetale';
 import Zdjecie from './components/Zdjecie';
 import Login from './components/Login';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { Authenticated } from './Context';
-
+import { Authenticated, Measurements, Paths } from './Context';
+import axiosInstance from './axios';
 
 
 const Routes = () => {
+
+    const [measurements, setMeasurements] = useState([]);
+    const [paths, setPaths] = useState([]);
+    // const history = useHistory();
+    useEffect(() => {
+        // const fetchData = async () => {
+        //     const types = await axiosInstance.get('filter-info/')
+        //     console.log(types)
+        //     // setPaths(types.data.trasy)
+        //     // setMeasurements(types.data.mierzone_wartosci)
+        // }
+        // fetchData()
+        // console.log('Hey')
+    }, [])
+
     const [zlecenia, setZlecenia] = useState([]);
     const location = useLocation()
     const { loggedIn } = useContext(Authenticated)
     return (
         <div>
-            <Navbar />
-            {/* <TransitionGroup>
+            <Paths.Provider value={{ paths, setPaths }}>
+                <Measurements.Provider value={{ measurements, setMeasurements }}>
+                    <Navbar />
+                    {/* <TransitionGroup>
                 <CSSTransition
                     timeout={0}
                     classNames='fade'
@@ -27,12 +44,12 @@ const Routes = () => {
                     <Switch>
                         <Route path='/login'>
                             {loggedIn ?
-                                <Zlecenia zlecenia={zlecenia} setZlecenia={setZlecenia}/> :
+                                <Zlecenia zlecenia={zlecenia} setZlecenia={setZlecenia} /> :
                                 <Login />}
                         </Route>
                         <Route path='/' exact>
                             {loggedIn ?
-                                <Zlecenia zlecenia={zlecenia} setZlecenia={setZlecenia}/> :
+                                <Zlecenia zlecenia={zlecenia} setZlecenia={setZlecenia} /> :
                                 <Redirect to="/login" />}
                         </Route>
                         <Route path='/pomiary'>
@@ -52,8 +69,10 @@ const Routes = () => {
                         </Route>
 
                     </Switch>
-                {/* </CSSTransition>
+                    {/* </CSSTransition>
             </TransitionGroup> */}
+                </Measurements.Provider>
+            </Paths.Provider>
         </div >
     );
 }
