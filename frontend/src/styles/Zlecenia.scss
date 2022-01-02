@@ -1,7 +1,19 @@
 @import '../App.scss';
 
 .zlecenia {
+    .titles {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr 1.3fr 1.6fr 1fr;
+        width: 90%;
+        margin: 5px auto;
+        align-items: center;
+        align-content: center;
+        animation: scaleup 500ms forwards;
+        transition: 0.2s;
+        transform: scale(0);
+    }
     li {
+        transform: scale(0);
         animation: scaleup 500ms forwards;
         width: 90%;
         height: 50px;
@@ -12,7 +24,7 @@
         padding: 10px 10px;
         display: grid;
         // justify-content: space-between;
-        grid-template-columns: 1.3fr 1fr 1.3fr 2fr 1fr;
+        grid-template-columns: 1.3fr 1fr 1.3fr 1.6fr 1fr;
         align-items: center;
         align-content: center;
         transition: 0.2s;

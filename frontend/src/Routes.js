@@ -44,7 +44,7 @@ const Routes = () => {
                     <Switch>
                         <Route path='/login'>
                             {loggedIn ?
-                                <Zlecenia zlecenia={zlecenia} setZlecenia={setZlecenia} /> :
+                                <Redirect to="/" /> :
                                 <Login />}
                         </Route>
                         <Route path='/' exact>

@@ -32,6 +32,11 @@ const Pomiarytab = () => {
     const [toDownload, setToDownload] = useState([]);
     const [ids, setIds] = useState([]);
     const [temp, setTemp] = useState(0);
+    const [page, setPage] = useState(1);
+    const [maxPages, setMaxPages] = useState(1);
+    const [prev, setPrev] = useState(null);
+    const [next, setNext] = useState(null);
+
 
 
     // useEffect(() => {
@@ -53,9 +58,13 @@ const Pomiarytab = () => {
     //     }
     // }, [dateFrom, dateTo, path, issueNumber, low, high]);
 
-    useEffect(async () => {
+    useEffect(() => {
         const fetchAndSet = async () => {
-            const data = await axiosInstance.get('pomiary/')
+            const data = await axiosInstance.get(`pomiary?page=${page}`)
+            console.log(data)
+            setPrev(data.data.previous)
+            setNext(data.data.next)
+            setMaxPages(Math.round(data.data.count / 5))
             const tabData = data.data.results
             // console.log(data.data.results)
             tabData.sort((a, b) => (a.id > b.id) ? 1 : -1)
@@ -64,7 +73,7 @@ const Pomiarytab = () => {
             setToDownload(tabData)
         }
         fetchAndSet()
-    }, [])
+    }, [page])
 
     const downloadJson = async () => {
         const myData = toDownload
@@ -155,6 +164,9 @@ const Pomiarytab = () => {
         })
 
     }
+    const changePage = (num) => {
+        console.log(page+num)
+    }
 
     return (
         <main className='pomiary'>
@@ -192,6 +204,20 @@ const Pomiarytab = () => {
                         ))}
                     </tbody>
                 </table>
+                <div className='pages'>
+                    {prev !== null ?
+                        <button onClick={(e) => setPage(page-1)}>{'<'}</button>
+                        :
+                        <button className='blacked'>{'<'}</button>
+
+                    }
+                    <button className='outof'>{page}/{maxPages}</button>
+                    {next !== null ?
+                        <button onClick={(e) => setPage(page+1)}>{'>'}</button>
+                        :
+                        <button className='blacked'>{'>'}</button>
+                    }
+                </div>
                 <div id='exports'>
                     <CSVLink data={filtered} filename={"pomiary.csv"}>
                         <button>Export CSV</button>

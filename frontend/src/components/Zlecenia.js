@@ -91,6 +91,13 @@ const Zlecenia = ({zlecenia, setZlecenia}) => {
         <>
             <Filters {...filterProps} />
             <main className='zlecenia'>
+                <header className='titles'>
+                    <span>Numer zlecenia</span>
+                    <span>Pojazd</span>
+                    <span>Data planowana</span>
+                    <span>Trasa</span>
+                    <span>Status</span>
+                </header>
                 <ul>
                     {filtered.map(item => (
                         <Link to={{
@@ -108,7 +115,9 @@ const Zlecenia = ({zlecenia, setZlecenia}) => {
                                     {item.planowana_data_realizacji.slice(0, 10)}
                                 </div>
                                 <div>
-                                    {item.trasa}
+                                    {item.trasa.split(' ').map(item => (
+                                        <span>{item}<br/></span>
+                                    ))}
                                 </div>
                                 <div>
                                     {item.koniec_realizacji ? "Zakończona" : "Planowana"}

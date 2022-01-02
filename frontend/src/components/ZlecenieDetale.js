@@ -50,6 +50,7 @@ const Zleceniedetale = () => {
     useEffect(() => {
         const fetchData = async () => {
             const data = await axiosInstance.get(`zlecenia/${loc.state}/`)
+            console.log(data)
             setdetails(data.data)
             const tab = flattenData(data.data.pomiary)
             tab.sort((a, b) => (a.id > b.id) ? 1 : -1)
@@ -71,58 +72,66 @@ const Zleceniedetale = () => {
                 <p><strong>Pojazd: </strong>{details.typ_pojazdu === 'D' ? "Dron" : "Łódka"}</p>
 
             </div>
-            <div className='pom-info'>
-                <h2 className='pom-title'>Pomiary</h2>
-                <table className='pomiary-tab'>
-                    <thead>
-                        <tr>
-                            <th>Nr zlecenia</th>
-                            <th>timestamp</th>
-                            <th>Szerokość geo</th>
-                            <th>Długość geo</th>
-                            <th>Wielkość</th>
-                            <th>Wartość</th>
-                            <th>Przekroczenie</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {tabData.map(item => (
-                            <tr key={item.id}>
-                                <td>{item.id}</td>
-                                <td>{item.timestamp?item.timestamp.slice(0, 16).replace('T', ' '):"Niezdefiniowany"}</td>
-                                <td>{item.szerokosc_geo}</td>
-                                <td>{item.dlugosc_geo}</td>
-                                <td>{item.mierzona_wielkosc}</td>
-                                <td>{item.wartosc}</td>
-                                <td>{item.czy_norma_przekroczona ? "Tak" : "Nie"}</td>
+            {tabData.length != 0 &&
+                <div className='pom-info'>
+                    <h2 className='pom-title'>Pomiary</h2>
+                    <table className='pomiary-tab'>
+                        <thead>
+                            <tr>
+                                <th>Nr zlecenia</th>
+                                <th>timestamp</th>
+                                <th>Szerokość geo</th>
+                                <th>Długość geo</th>
+                                <th>Wielkość</th>
+                                <th>Wartość</th>
+                                <th>Przekroczenie</th>
                             </tr>
-                        ))}
-
-                    </tbody>
-                </table>
-            </div>
-            <div className='img-info'>
-                <h2 className='pom-title'>Zdjęcia przekroczeń</h2>
-                {przekroczenia.map(item => (
-                    <div className='img-info-container' key={item.id}>
-                        <img src={`${item.zdjecie}`} alt=":(" width={250} />
-                        <div>
-                            <p><strong>Trasa: </strong>{item.trasa}</p>
-                            <p><strong>Data: </strong> {item.timestamp?item.timestamp.slice(0, 16).replace('T', ' '):"Niezdefiniowany"}</p>
-                            <p><strong>Szerokość geo: </strong>{item.szerokosc_geo}</p>
-                            <p><strong>Dlugość: </strong>{item.dlugosc_geo}</p>
-                            {measurements.map((elem, key) => (
-                                <p key={key}><strong>{elem}: </strong>{item[elem]}</p>
+                        </thead>
+                        <tbody>
+                            {tabData.map(item => (
+                                <tr key={item.id}>
+                                    <td>{item.id}</td>
+                                    <td>{item.timestamp ? item.timestamp.slice(0, 16).replace('T', ' ') : "Niezdefiniowany"}</td>
+                                    <td>{item.szerokosc_geo}</td>
+                                    <td>{item.dlugosc_geo}</td>
+                                    <td>{item.mierzona_wielkosc}</td>
+                                    <td>{item.wartosc}</td>
+                                    <td>{item.czy_norma_przekroczona ? "Tak" : "Nie"}</td>
+                                </tr>
                             ))}
-                            <p><strong>Przekroczenie: </strong>{item.czy_norma_przekroczona?"Tak":"Nie"}</p>
+
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            {przekroczenia.length != 0 &&
+                <div className='img-info'>
+                    <h2 className='pom-title'>Zdjęcia przekroczeń</h2>
+                    {przekroczenia.map(item => (
+                        <div className='img-info-container' key={item.id}>
+                            <img src={`${item.zdjecie}`} alt=":(" width={250} />
+                            <div>
+                                <p><strong>Trasa: </strong>{item.trasa}</p>
+                                <p><strong>Data: </strong> {item.timestamp ? item.timestamp.slice(0, 16).replace('T', ' ') : "Niezdefiniowany"}</p>
+                                <p><strong>Szerokość geo: </strong>{item.szerokosc_geo}</p>
+                                <p><strong>Dlugość: </strong>{item.dlugosc_geo}</p>
+                                {measurements.map((elem, key) => (
+                                    <p key={key}><strong>{elem}: </strong>{item[elem]}</p>
+                                ))}
+                                <p><strong>Przekroczenie: </strong>{item.czy_norma_przekroczona ? "Tak" : "Nie"}</p>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
-            <div className='vid-info'>
-                <h2>Nagranie z przelotu</h2>
-                <iframe width="560" controls="2" height="315" title="Drone video" src={`${details.nagranie?details.nagranie.replace('watch?v=', 'embed/'):'none'}?autoplay=0&showinfo=0&autohide=1`} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-            </div>
+                    ))}
+                </div>
+            }
+
+            {details.nagranie &&
+                <div className='vid-info'>
+                    <h2>Nagranie z przelotu</h2>
+                    <iframe width="560" controls="2" height="315" title="Drone video" src={`${details.nagranie.replace('watch?v=', 'embed/')}?autoplay=0&showinfo=0&autohide=1`} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                </div>
+            }
         </div>
     );
 }

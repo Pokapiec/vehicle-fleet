@@ -3,6 +3,7 @@
 table {
     font-size: small;
     margin: 0 auto;
+    margin-bottom: 1rem;
     border: 1px solid $base-color1;
     text-align: center;
     width: 90%;
@@ -34,10 +35,14 @@ tbody {
     }
 }
 #exports {
-    margin: 0 auto;
+    margin: 20px auto 0 auto;
     width: 90%;
     display: flex;
     justify-content: right;
+    button {
+        margin-top: 0;
+        margin-right: 0;
+    }
     
 }
 
@@ -55,26 +60,42 @@ tbody {
         }
     }
     button {
-        margin: 20px 10px 10px 10px;
+        margin: 20px 0 10px 10px;
         padding: 10px 20px;
         background-color: $base-color1;
         color: $light-border;
         border-radius: 4px;
         border: none;
         transition: 0.2s;
-        &:hover {
+        &:not(.blacked):not(.outof):hover {
             cursor: pointer;
             transform: scale(1.05);
             background-color: $base-color3;
         }
-        &:active {
+        &:not(.blacked):not(.outof):active {
             filter: brightness(80%);
             color: white;
         }
     }
     @media (max-width: 800px) {
         table {
-            font-size: x-small;
+            font-size: 8px;
+        }
+    }
+    .pages {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        width: 90%;
+        margin: 0 auto;
+        button {
+            margin-left: .1em;
+            margin-right: 0;
+            padding-left: .8em;
+            padding-right: .8em;
+        }
+        .blacked {
+            color: gray;
         }
     }
 }
