@@ -19,16 +19,21 @@ const Login = () => {
                 password: data.password,
             })
             // console.log(res)
-            localStorage.setItem('access_token', res.data.access);
-            localStorage.setItem('refresh_token', res.data.refresh);
-            localStorage.setItem('is_refreshing', false);
-            axiosInstance.defaults.headers['Authorization'] =
-                'JWT ' + localStorage.getItem('access_token');
+            const login = document.querySelector('.auth-form')
+            login.classList.toggle('go-off')
+            setTimeout(() => {
+                localStorage.setItem('access_token', res.data.access);
+                localStorage.setItem('refresh_token', res.data.refresh);
+                localStorage.setItem('is_refreshing', false);
+                axiosInstance.defaults.headers['Authorization'] =
+                    'JWT ' + localStorage.getItem('access_token');
 
-            setloggedIn(true)
-            localStorage.setItem('loggedIn', true);
-            localStorage.setItem('czy_naukowiec', jwt_decode(localStorage.getItem('access_token')).czy_naukowiec)
-            history.push('/')
+                setloggedIn(true)
+                localStorage.setItem('loggedIn', true);
+                localStorage.setItem('czy_naukowiec', jwt_decode(localStorage.getItem('access_token')).czy_naukowiec)
+                history.push('/')
+                login.classList.toggle('go-off')
+            }, 600)
         } catch (error) {
             setwarning(true)
         }

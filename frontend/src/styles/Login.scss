@@ -80,3 +80,14 @@
     }
 }
 
+.go-off {
+    animation: fadeOut 1.7s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(100rem);
+    }
+}
+

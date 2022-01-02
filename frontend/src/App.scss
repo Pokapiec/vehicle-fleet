@@ -12,7 +12,7 @@ $shadow-color: gray;
 
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Quicksand&display=swap');
 
-body {
+body, input {
   font-family: 'Nanum Gothic', sans-serif;
   font-family: 'Quicksand', sans-serif;
 }
@@ -80,10 +80,7 @@ body {
 }
 
 @keyframes scaleup {
-  from {
-      transform: scale(0);
-  }
-  to {
+to {
       transform: scale(1);
   }
 }
