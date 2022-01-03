@@ -45,10 +45,15 @@ const Zdjecie = () => {
         let arr = []
         data.forEach(elem => {
             let pom = { ...elem }
+            let przekroczenia = []
             elem.czujniki.forEach(inner => {
                 pom[inner.mierzona_wielkosc] = inner.wartosc
                 pom[inner.mierzona_wielkosc] = inner.wartosc
+                if (inner.czy_norma_przekroczona) {
+                    przekroczenia.push(inner.mierzona_wielkosc)
+                }
             })
+            pom['przekroczenie'] = przekroczenia.join(', ')
             arr.push(pom)
         })
         return arr
@@ -68,7 +73,7 @@ const Zdjecie = () => {
     useEffect(() => {
         const fetchData = async () => {
             const data = await axiosInstance.get('przekroczenia/')
-            // const types = await axiosInstance.get('filter-info/')
+            console.log(data)
             setPrzekroczs(flattenData(data.data))
             setFiltered(flattenData(data.data))
             // const reduced = data.data.map(item => item.mierzona_wielkosc)
@@ -171,7 +176,7 @@ const Zdjecie = () => {
                                         <p key={key}><strong>{elem}: </strong>{item[elem]}</p>
                                     ))}
 
-                                    <p><strong>Przekroczenie: </strong>{item.czy_norma_przekroczona ? "Tak" : "Nie"}</p>
+                                    <p><strong>Przekroczenie: </strong>{item.przekroczenie}</p>
                                 </div>
                                 <CSVLink data={[item]} filename={"przekroczenia.csv"}>
                                     <button>Pobierz dane</button>
