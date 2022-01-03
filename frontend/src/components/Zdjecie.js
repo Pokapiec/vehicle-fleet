@@ -173,10 +173,9 @@ const Zdjecie = () => {
                                     <p><strong>Długość geo: </strong>{item.dlugosc_geo}</p>
                                     <p><strong>Szerokość geo: </strong>{item.szerokosc_geo}</p>
                                     {measurements.map((elem, key) => (
-                                        <p key={key}><strong>{elem}: </strong>{item[elem]}</p>
+                                        
+                                        <p className={`${item.przekroczenie === elem?"warning":""}`} key={key}><strong>{elem}: </strong>{item[elem]}</p>
                                     ))}
-
-                                    <p><strong>Przekroczenie: </strong>{item.przekroczenie}</p>
                                 </div>
                                 <CSVLink data={[item]} filename={"przekroczenia.csv"}>
                                     <button>Pobierz dane</button>
