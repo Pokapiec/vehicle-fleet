@@ -36,7 +36,7 @@ const Pomiarytab = () => {
     const [maxPages, setMaxPages] = useState(1);
     const [prev, setPrev] = useState(null);
     const [next, setNext] = useState(null);
-
+    const [condition, setCondition] = useState('');
 
 
     // useEffect(() => {
@@ -60,11 +60,13 @@ const Pomiarytab = () => {
 
     useEffect(() => {
         const fetchAndSet = async () => {
-            const data = await axiosInstance.get(`pomiary?page=${page}`)
+            let url = `pomiary?page=${page}`
+            if (condition) url += `&${condition}`
+            const data = await axiosInstance.get(url)
             console.log(data)
             setPrev(data.data.previous)
             setNext(data.data.next)
-            setMaxPages(Math.round(data.data.count / 5))
+            setMaxPages(Math.ceil(data.data.count / 5))
             const tabData = data.data.results
             // console.log(data.data.results)
             tabData.sort((a, b) => (a.id > b.id) ? 1 : -1)
@@ -73,7 +75,7 @@ const Pomiarytab = () => {
             setToDownload(tabData)
         }
         fetchAndSet()
-    }, [page])
+    }, [page, condition])
 
     const downloadJson = async () => {
         const myData = toDownload
@@ -150,6 +152,11 @@ const Pomiarytab = () => {
         const tabData = data.data.results
         tabData.sort((a, b) => (a.id > b.id) ? 1 : -1)
         setFiltered(tabData)
+        setPage(1)
+        setCondition(condition)
+        setPrev(data.data.previous)
+        setNext(data.data.next)
+        setMaxPages(Math.ceil(data.data.count / 5))
         // } else {
         //     setFiltered(pomiary)
         // }
@@ -162,7 +169,17 @@ const Pomiarytab = () => {
             let elem = document.querySelector(item)
             elem.value = ''
         })
+        setDateFrom('')
+        setDateTo('')
+        setPath('')
+        setIssueNumber('')
+        setLow(0)
+        setHigh(0)
+        setMeasure('')
+        setIfVal('')
 
+        setCondition('')
+        setPage(1)
     }
     const changePage = (num) => {
         console.log(page+num)

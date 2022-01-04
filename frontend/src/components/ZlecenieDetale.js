@@ -28,10 +28,15 @@ const Zleceniedetale = () => {
         let arr = []
         data.forEach(elem => {
             let pom = { ...elem }
+            let przekroczenia = []
             elem.czujniki.forEach(inner => {
                 pom[inner.mierzona_wielkosc] = inner.wartosc
                 pom[inner.mierzona_wielkosc] = inner.wartosc
+                if (inner.czy_norma_przekroczona) {
+                    przekroczenia.push(inner.mierzona_wielkosc)
+                }
             })
+            pom['przekroczenie'] = przekroczenia.join(', ')
             arr.push(pom)
         })
         return arr
@@ -117,9 +122,8 @@ const Zleceniedetale = () => {
                                 <p><strong>Szerokość geo: </strong>{item.szerokosc_geo}</p>
                                 <p><strong>Dlugość: </strong>{item.dlugosc_geo}</p>
                                 {measurements.map((elem, key) => (
-                                    <p key={key}><strong>{elem}: </strong>{item[elem]}</p>
+                                    <p className={`${item.przekroczenie === elem?"warning":""}`} key={key}><strong>{elem}: </strong>{item[elem]}</p>
                                 ))}
-                                <p><strong>Przekroczenie: </strong>{item.czy_norma_przekroczona ? "Tak" : "Nie"}</p>
                             </div>
                         </div>
                     ))}

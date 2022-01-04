@@ -173,7 +173,6 @@ const Zdjecie = () => {
                                     <p><strong>Długość geo: </strong>{item.dlugosc_geo}</p>
                                     <p><strong>Szerokość geo: </strong>{item.szerokosc_geo}</p>
                                     {measurements.map((elem, key) => (
-                                        
                                         <p className={`${item.przekroczenie === elem?"warning":""}`} key={key}><strong>{elem}: </strong>{item[elem]}</p>
                                     ))}
                                 </div>
